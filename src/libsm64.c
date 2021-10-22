@@ -171,7 +171,12 @@ SM64_LIB_FN int32_t sm64_mario_create( int16_t x, int16_t y, int16_t z )
     return marioIndex;
 }
 
-SM64_LIB_FN void sm64_mario_tick( int32_t marioId, const struct SM64MarioInputs *inputs, struct SM64MarioState *outState, struct SM64MarioGeometryBuffers *outBuffers )
+SM64_LIB_FN void sm64_mario_tick( 
+    int32_t marioId,
+    const struct SM64MarioInputs *inputs,
+    struct SM64MarioState *outState,
+    struct SM64MarioGeometryBuffers *outBuffers,
+    uint8_t giveWingcap )
 {
     if( marioId >= s_mario_instance_pool.size || s_mario_instance_pool.objects[marioId] == NULL )
     {
@@ -187,9 +192,20 @@ SM64_LIB_FN void sm64_mario_tick( int32_t marioId, const struct SM64MarioInputs 
 
     gMarioState->area->camera->yaw = atan2s( inputs->camLookZ, inputs->camLookX );
 
+    if( giveWingcap )
+    {
+        gMarioState->flags |= MARIO_WING_CAP;
+    }
+
     gController.stickX = -64.0f * inputs->stickX;
     gController.stickY = 64.0f * inputs->stickY;
     gController.stickMag = sqrtf( gController.stickX*gController.stickX + gController.stickY*gController.stickY );
+    struct MarioBodyState *bodyState = &g_state->mgBodyStates[0];
+    if(bodyState->action & ACT_FLAG_SWIMMING_OR_FLYING)
+    {
+        gController.stickY *= -1;
+        gController.stickX *= -1;
+    }
 
     apply_mario_platform_displacement();
     bhv_mario_update();
