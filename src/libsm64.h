@@ -23,6 +23,38 @@ struct SM64Surface
     int16_t vertices[3][3];
 };
 
+struct SM64MarioState
+{
+    float posX, posY, posZ;
+    float velX, velY, velZ;
+    float faceAngle;
+    int16_t health;
+};
+
+struct SM64MarioBodyState
+{
+    /*0x00*/ uint32_t action;
+    /*0x04*/ int8_t capState; /// see MarioCapGSCId
+    /*0x05*/ int8_t eyeState;
+    /*0x06*/ int8_t handState;
+    /*0x07*/ int8_t wingFlutter; /// whether Mario's wing cap wings are fluttering
+    /*0x08*/ int16_t modelState;
+    /*0x0A*/ int8_t grabPos;
+    /*0x0B*/ uint8_t punchState; /// 2 bits for type of punch, 6 bits for punch animation timer
+    /*0x0C*/ int16_t torsoAngle;
+    /*0x12*/ int16_t headAngle;
+    /*0x18*/ float heldObjLastPosition; /// also known as HOLP
+    uint8_t padding1, padding2, padding3, padding4;
+
+    // Animation info
+    int16_t animFrame;
+    uint32_t animIndex;
+
+    uint8_t padding5, padding6, padding7, padding8;
+
+    struct SM64MarioState marioState;
+};
+
 struct SM64MarioInputs
 {
     float camLookX, camLookZ;
@@ -41,14 +73,6 @@ struct SM64SurfaceObject
     struct SM64ObjectTransform transform;
     uint32_t surfaceCount;
     struct SM64Surface *surfaces;
-};
-
-struct SM64MarioState
-{
-    float position[3];
-    float velocity[3];
-    float faceAngle;
-    int16_t health;
 };
 
 struct SM64MarioGeometryBuffers
@@ -80,7 +104,8 @@ extern SM64_LIB_FN void sm64_mario_tick(
     const struct SM64MarioInputs *inputs,
     struct SM64MarioState *outState,
     struct SM64MarioGeometryBuffers *outBuffers,
-    uint8_t giveWingcap );
+    struct SM64MarioBodyState *outBodyState,
+    uint8_t isInput);
 extern SM64_LIB_FN void sm64_mario_delete( int32_t marioId );
 
 extern SM64_LIB_FN uint32_t sm64_surface_object_create( const struct SM64SurfaceObject *surfaceObject );

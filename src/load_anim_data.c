@@ -4,6 +4,7 @@
 
 static uint32_t s_num_entries = 0;
 static struct Animation *s_libsm64_mario_animations = NULL;
+static uint32_t currentAnimIndex = 0;
 
 #define ANIM_DATA_ADDRESS 0x004EC000
 
@@ -82,6 +83,7 @@ void load_mario_anims_from_rom( uint8_t *rom )
 
 void load_mario_animation(struct MarioAnimation *a, u32 index)
 {
+    currentAnimIndex = index;
     if (a->currentAnimAddr != 1 + index) {
         a->currentAnimAddr = 1 + index;
         a->targetAnim = &s_libsm64_mario_animations[index];
@@ -99,4 +101,9 @@ void unload_mario_anims( void )
     free( s_libsm64_mario_animations );
     s_libsm64_mario_animations = NULL;
     s_num_entries = 0;
+}
+
+uint32_t current_anim_index()
+{
+    return currentAnimIndex;
 }

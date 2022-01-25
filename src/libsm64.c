@@ -176,7 +176,8 @@ SM64_LIB_FN void sm64_mario_tick(
     const struct SM64MarioInputs *inputs,
     struct SM64MarioState *outState,
     struct SM64MarioGeometryBuffers *outBuffers,
-    uint8_t giveWingcap )
+    struct SM64MarioBodyState *outBodyState,
+    uint8_t isInput)
 {
     if( marioId >= s_mario_instance_pool.size || s_mario_instance_pool.objects[marioId] == NULL )
     {
@@ -192,24 +193,52 @@ SM64_LIB_FN void sm64_mario_tick(
 
     gMarioState->area->camera->yaw = atan2s( inputs->camLookZ, inputs->camLookX );
 
-    if( giveWingcap )
-    {
-        gMarioState->flags |= MARIO_WING_CAP;
-    }
+    //if( giveWingcap )
+    //{
+    //    gMarioState->flags |= MARIO_WING_CAP;
+    //}
 
     gController.stickX = -64.0f * inputs->stickX;
     gController.stickY = 64.0f * inputs->stickY;
     gController.stickMag = sqrtf( gController.stickX*gController.stickX + gController.stickY*gController.stickY );
-    struct MarioBodyState *bodyState = &g_state->mgBodyStates[0];
-    if(bodyState->action & ACT_FLAG_SWIMMING_OR_FLYING)
-    {
-        gController.stickY *= -1;
-        gController.stickX *= -1;
-    }
 
-    apply_mario_platform_displacement();
-    bhv_mario_update();
-    update_mario_platform(); // TODO platform grabbed here and used next tick could be a use-after-free
+    struct MarioBodyState *bodyState = &g_state->mgBodyStates[0];
+    if(isInput)
+    {
+        memcpy( outBodyState, bodyState, sizeof( struct MarioBodyState ));
+        outBodyState->animFrame = gMarioState->marioObj->header.gfx.animInfo.animFrame;
+        outBodyState->animIndex = current_anim_index();
+
+        // If mario is flying, invert the controls
+        if(bodyState->action & ACT_FLAG_SWIMMING_OR_FLYING)
+        {
+            gController.stickY *= -1;
+            gController.stickX *= -1;
+        }
+
+        apply_mario_platform_displacement();
+        bhv_mario_update();
+        update_mario_platform();
+    }
+    else
+    {
+        memcpy( bodyState, outBodyState, sizeof( struct MarioBodyState ));
+        load_mario_animation(gMarioState->animation, outBodyState->animIndex);
+        struct Animation *targetAnim = gMarioState->animation->targetAnim;
+        //o->header.gfx.animInfo.animID = outBodyState->animIndex;
+        //o->header.gfx.animInfo.curAnim = targetAnim;
+        //gMarioState->animation->targetAnim = gMarioState->animation;
+        gMarioState->marioObj->header.gfx.animInfo.animFrame = outBodyState->animFrame;
+        gMarioState->marioObj->header.gfx.animInfo.curAnim = targetAnim;
+        gMarioState->marioObj->header.gfx.animInfo.animID = outBodyState->animIndex;
+        gMarioState->pos[0] = outBodyState->marioState.posX;
+        gMarioState->pos[1] = outBodyState->marioState.posY;
+        gMarioState->pos[2] = outBodyState->marioState.posZ;
+        gMarioState->vel[0] = outBodyState->marioState.velX;
+        gMarioState->vel[1] = outBodyState->marioState.velY;
+        gMarioState->vel[2] = outBodyState->marioState.velZ;
+        gMarioState->faceAngle[1] = outState->faceAngle * 32768.0f * 3.14159f;
+    }
 
     gfx_adapter_bind_output_buffers( outBuffers );
 
@@ -217,10 +246,18 @@ SM64_LIB_FN void sm64_mario_tick(
 
     gAreaUpdateCounter++;
 
-    outState->health = gMarioState->health;
-    vec3f_copy( outState->position, gMarioState->pos );
-    vec3f_copy( outState->velocity, gMarioState->vel );
-    outState->faceAngle = (float)gMarioState->faceAngle[1] / 32768.0f * 3.14159f;
+    if(isInput)
+    {
+        outState->health = gMarioState->health;
+        outState->posX = gMarioState->pos[0];
+        outState->posY = gMarioState->pos[1];
+        outState->posZ = gMarioState->pos[2];
+        outState->velX = gMarioState->vel[0];
+        outState->velY = gMarioState->vel[1];
+        outState->velZ = gMarioState->vel[2];
+        outState->faceAngle = (float)gMarioState->faceAngle[1] / 32768.0f * 3.14159f;
+        memcpy(&outBodyState->marioState, outState, sizeof(struct SM64MarioState));
+    }
 }
 
 SM64_LIB_FN void sm64_mario_delete( int32_t marioId )
