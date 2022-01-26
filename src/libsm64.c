@@ -227,13 +227,7 @@ SM64_LIB_FN void sm64_mario_tick(
         gMarioState->marioObj->header.gfx.animInfo.animID = outBodyState->animIndex;
         gMarioState->marioObj->header.gfx.animInfo.animYTrans = outBodyState->animYTrans;
         gMarioState->marioObj->header.gfx.angle[1] = outState->faceAngle * 32768.0f / 3.14159f;
-        if (outBodyState->action == ACT_FINISH_TURNING_AROUND)
-        {
-            gMarioState->marioObj->header.gfx.angle[1] =
-                outBodyState->intendedYaw - 
-                approach_s32((s16)(outBodyState->intendedYaw - gMarioState->marioObj->header.gfx.angle[1]), 0, 0x800, 0x800);
-        }
-        if(outBodyState->action == ACT_SIDE_FLIP || outBodyState->action == ACT_FINISH_TURNING_AROUND)
+        if(outBodyState->action == ACT_SIDE_FLIP)
         {
             gMarioState->marioObj->header.gfx.angle[1] += 0x8000;
         }
@@ -250,10 +244,9 @@ SM64_LIB_FN void sm64_mario_tick(
 
     geo_process_root_hack_single_node( s_mario_graph_node );
 
-    gAreaUpdateCounter++;
-
     if(isInput)
     {
+        gAreaUpdateCounter++;
         outState->health = gMarioState->health;
         outState->posX = gMarioState->pos[0];
         outState->posY = gMarioState->pos[1];
