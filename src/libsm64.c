@@ -209,6 +209,7 @@ SM64_LIB_FN void sm64_mario_tick(
         outBodyState->animFrame = gMarioState->marioObj->header.gfx.animInfo.animFrame;
         outBodyState->animYTrans = gMarioState->marioObj->header.gfx.animInfo.animYTrans;
         outBodyState->animIndex = current_anim_index();
+        outBodyState->gfxFaceAngle = gMarioState->marioObj->header.gfx.angle[1];
 
         // If mario is flying, invert the controls
         if(bodyState->action & ACT_FLAG_SWIMMING_OR_FLYING)
@@ -226,11 +227,12 @@ SM64_LIB_FN void sm64_mario_tick(
         gMarioState->marioObj->header.gfx.animInfo.curAnim = targetAnim;
         gMarioState->marioObj->header.gfx.animInfo.animID = outBodyState->animIndex;
         gMarioState->marioObj->header.gfx.animInfo.animYTrans = outBodyState->animYTrans;
-        gMarioState->marioObj->header.gfx.angle[1] = outState->faceAngle * 32768.0f / 3.14159f;
-        if(outBodyState->action == ACT_SIDE_FLIP)
-        {
-            gMarioState->marioObj->header.gfx.angle[1] += 0x8000;
-        }
+        gMarioState->marioObj->header.gfx.angle[1] = outBodyState->gfxFaceAngle;
+        //gMarioState->marioObj->header.gfx.angle[1] = outState->faceAngle * 32768.0f / 3.14159f;
+        //if(outBodyState->action == ACT_SIDE_FLIP)
+        //{
+        //    gMarioState->marioObj->header.gfx.angle[1] += 0x8000;
+        //}
         gMarioState->marioObj->header.gfx.pos[0] = outBodyState->marioState.posX;
         gMarioState->marioObj->header.gfx.pos[1] = outBodyState->marioState.posY;
         gMarioState->marioObj->header.gfx.pos[2] = outBodyState->marioState.posZ;

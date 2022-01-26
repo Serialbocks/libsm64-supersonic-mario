@@ -51,6 +51,8 @@ struct SM64MarioBodyState
     uint32_t animIndex;
     int16_t animYTrans;
 
+    int16_t gfxFaceAngle;
+
     uint8_t padding5, padding6, padding7, padding8;
 
     struct SM64MarioState marioState;
