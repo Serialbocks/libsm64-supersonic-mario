@@ -244,9 +244,10 @@ SM64_LIB_FN void sm64_mario_tick(
 
     geo_process_root_hack_single_node( s_mario_graph_node );
 
+    gAreaUpdateCounter++;
+
     if(isInput)
     {
-        gAreaUpdateCounter++;
         outState->health = gMarioState->health;
         outState->posX = gMarioState->pos[0];
         outState->posY = gMarioState->pos[1];
