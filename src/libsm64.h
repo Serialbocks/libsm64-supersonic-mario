@@ -51,6 +51,9 @@ struct SM64MarioBodyState
     uint32_t animIndex;
     int16_t animYTrans;
 
+    // Needed to determine mario's facing direction for some actions
+    int16_t intendedYaw;
+
     uint8_t padding5, padding6, padding7, padding8;
 
     struct SM64MarioState marioState;
