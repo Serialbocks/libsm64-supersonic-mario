@@ -227,6 +227,10 @@ SM64_LIB_FN void sm64_mario_tick(
         gMarioState->marioObj->header.gfx.animInfo.animID = outBodyState->animIndex;
         gMarioState->marioObj->header.gfx.animInfo.animYTrans = outBodyState->animYTrans;
         gMarioState->marioObj->header.gfx.angle[1] = outState->faceAngle * 32768.0f / 3.14159f;
+        if(outBodyState->action == ACT_SIDE_FLIP)
+        {
+            gMarioState->marioObj->header.gfx.angle[1] += 0x8000;
+        }
         gMarioState->marioObj->header.gfx.pos[0] = outBodyState->marioState.posX;
         gMarioState->marioObj->header.gfx.pos[1] = outBodyState->marioState.posY;
         gMarioState->marioObj->header.gfx.pos[2] = outBodyState->marioState.posZ;
