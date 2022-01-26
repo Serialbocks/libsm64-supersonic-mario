@@ -187,26 +187,27 @@ SM64_LIB_FN void sm64_mario_tick(
 
     global_state_bind( ((struct MarioInstance *)s_mario_instance_pool.objects[ marioId ])->globalState );
 
-    update_button( inputs->buttonA, A_BUTTON );
-    update_button( inputs->buttonB, B_BUTTON );
-    update_button( inputs->buttonZ, Z_TRIG );
-
-    gMarioState->area->camera->yaw = atan2s( inputs->camLookZ, inputs->camLookX );
-
     //if( giveWingcap )
     //{
     //    gMarioState->flags |= MARIO_WING_CAP;
     //}
 
-    gController.stickX = -64.0f * inputs->stickX;
-    gController.stickY = 64.0f * inputs->stickY;
-    gController.stickMag = sqrtf( gController.stickX*gController.stickX + gController.stickY*gController.stickY );
-
     struct MarioBodyState *bodyState = &g_state->mgBodyStates[0];
     if(isInput)
     {
+        update_button( inputs->buttonA, A_BUTTON );
+        update_button( inputs->buttonB, B_BUTTON );
+        update_button( inputs->buttonZ, Z_TRIG );
+
+        gMarioState->area->camera->yaw = atan2s( inputs->camLookZ, inputs->camLookX );
+
+        gController.stickX = -64.0f * inputs->stickX;
+        gController.stickY = 64.0f * inputs->stickY;
+        gController.stickMag = sqrtf( gController.stickX*gController.stickX + gController.stickY*gController.stickY );
+
         memcpy( outBodyState, bodyState, sizeof( struct MarioBodyState ));
         outBodyState->animFrame = gMarioState->marioObj->header.gfx.animInfo.animFrame;
+        outBodyState->animYTrans = gMarioState->marioObj->header.gfx.animInfo.animYTrans;
         outBodyState->animIndex = current_anim_index();
 
         // If mario is flying, invert the controls
@@ -215,39 +216,33 @@ SM64_LIB_FN void sm64_mario_tick(
             gController.stickY *= -1;
             gController.stickX *= -1;
         }
-
-        apply_mario_platform_displacement();
-        bhv_mario_update();
-        update_mario_platform();
     }
     else
     {
-        memcpy( bodyState, outBodyState, sizeof( struct MarioBodyState ));
+        memcpy(bodyState, outBodyState, sizeof(struct MarioBodyState));
         load_mario_animation(gMarioState->animation, outBodyState->animIndex);
-        struct Animation *targetAnim = gMarioState->animation->targetAnim;
-        //o->header.gfx.animInfo.animID = outBodyState->animIndex;
-        //o->header.gfx.animInfo.curAnim = targetAnim;
-        //gMarioState->animation->targetAnim = gMarioState->animation;
+        struct Animation* targetAnim = gMarioState->animation->targetAnim;
         gMarioState->marioObj->header.gfx.animInfo.animFrame = outBodyState->animFrame;
         gMarioState->marioObj->header.gfx.animInfo.curAnim = targetAnim;
         gMarioState->marioObj->header.gfx.animInfo.animID = outBodyState->animIndex;
-        gMarioState->pos[0] = outBodyState->marioState.posX;
-        gMarioState->pos[1] = outBodyState->marioState.posY;
-        gMarioState->pos[2] = outBodyState->marioState.posZ;
-        gMarioState->vel[0] = outBodyState->marioState.velX;
-        gMarioState->vel[1] = outBodyState->marioState.velY;
-        gMarioState->vel[2] = outBodyState->marioState.velZ;
-        gMarioState->faceAngle[1] = outState->faceAngle * 32768.0f * 3.14159f;
+        gMarioState->marioObj->header.gfx.animInfo.animYTrans = outBodyState->animYTrans;
+        gMarioState->marioObj->header.gfx.angle[1] = outState->faceAngle * 32768.0f / 3.14159f;
+        gMarioState->marioObj->header.gfx.pos[0] = outBodyState->marioState.posX;
+        gMarioState->marioObj->header.gfx.pos[1] = outBodyState->marioState.posY;
+        gMarioState->marioObj->header.gfx.pos[2] = outBodyState->marioState.posZ;
     }
+
+    apply_mario_platform_displacement();
+    bhv_mario_update(isInput);
+    update_mario_platform();
 
     gfx_adapter_bind_output_buffers( outBuffers );
 
     geo_process_root_hack_single_node( s_mario_graph_node );
 
-    gAreaUpdateCounter++;
-
     if(isInput)
     {
+        gAreaUpdateCounter++;
         outState->health = gMarioState->health;
         outState->posX = gMarioState->pos[0];
         outState->posY = gMarioState->pos[1];

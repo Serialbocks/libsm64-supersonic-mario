@@ -1707,13 +1707,14 @@ void func_sh_8025574C(void) {
 /**
  * Main function for executing Mario's behavior.
  */
-s32 execute_mario_action(UNUSED struct Object *o) {
+s32 execute_mario_action(UNUSED struct Object *o, uint8_t isInput) {
     s32 inLoop = TRUE;
 
     if (gMarioState->action) {
         gMarioState->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
         mario_reset_bodystate(gMarioState);
         update_mario_inputs(gMarioState);
+
         mario_handle_special_floors(gMarioState);
         mario_process_interactions(gMarioState);
 
@@ -1725,7 +1726,7 @@ s32 execute_mario_action(UNUSED struct Object *o) {
         // The function can loop through many action shifts in one frame,
         // which can lead to unexpected sub-frame behavior. Could potentially hang
         // if a loop of actions were found, but there has not been a situation found.
-        while (inLoop) {
+        while (inLoop && isInput) {
             switch (gMarioState->action & ACT_GROUP_MASK) {
                 case ACT_GROUP_STATIONARY:
                     inLoop = mario_execute_stationary_action(gMarioState);

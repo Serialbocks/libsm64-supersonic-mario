@@ -49,6 +49,7 @@ struct SM64MarioBodyState
     // Animation info
     int16_t animFrame;
     uint32_t animIndex;
+    int16_t animYTrans;
 
     uint8_t padding5, padding6, padding7, padding8;
 
