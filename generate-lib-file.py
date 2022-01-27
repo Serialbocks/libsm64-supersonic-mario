@@ -44,7 +44,6 @@ def main():
     i = 0
     while i <= numFunctions:
         split = exportsLines[i].strip().split(' ')
-        print(split)
         if(len(split) > 5):
             funcName = split[6].strip()
             defFile.write(funcName)
