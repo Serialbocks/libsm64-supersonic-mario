@@ -232,7 +232,7 @@ SM64_LIB_FN void sm64_mario_tick(
         gMarioState->marioObj->header.gfx.pos[0] = outBodyState->marioState.posX;
         gMarioState->marioObj->header.gfx.pos[1] = outBodyState->marioState.posY;
         gMarioState->marioObj->header.gfx.pos[2] = outBodyState->marioState.posZ;
-        gAreaUpdateCounter = outBodyState->areaUpdateCounter;
+        gBlinkUpdateCounter = outBodyState->areaUpdateCounter;
     }
 
     apply_mario_platform_displacement();
@@ -246,6 +246,7 @@ SM64_LIB_FN void sm64_mario_tick(
     if(isInput)
     {
         gAreaUpdateCounter++;
+        gBlinkUpdateCounter = gAreaUpdateCounter;
         outState->health = gMarioState->health;
         outState->posX = gMarioState->pos[0];
         outState->posY = gMarioState->pos[1];

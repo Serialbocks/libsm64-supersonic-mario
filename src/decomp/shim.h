@@ -32,6 +32,7 @@
 #define D_80339D10           (g_state->mD_80339D10)
 #define gMarioState          (&g_state->mgMarioStateVal)
 #define gAreaUpdateCounter   (g_state->mgAreaUpdateCounter)
+#define gBlinkUpdateCounter  (g_state->mgBlinkUpdateCounter)
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"

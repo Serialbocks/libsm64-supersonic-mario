@@ -25,6 +25,7 @@ struct GlobalState
 
     // rendering_graph_node.c
     u16 mgAreaUpdateCounter;
+    u16 mgBlinkUpdateCounter;
 
     // misc
     u32 mgGlobalTimer;
