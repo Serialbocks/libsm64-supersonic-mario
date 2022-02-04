@@ -177,7 +177,8 @@ SM64_LIB_FN void sm64_mario_tick(
     struct SM64MarioState *outState,
     struct SM64MarioGeometryBuffers *outBuffers,
     struct SM64MarioBodyState *outBodyState,
-    uint8_t isInput)
+    uint8_t isInput,
+    uint8_t giveWingcap)
 {
     if( marioId >= s_mario_instance_pool.size || s_mario_instance_pool.objects[marioId] == NULL )
     {
@@ -187,10 +188,10 @@ SM64_LIB_FN void sm64_mario_tick(
 
     global_state_bind( ((struct MarioInstance *)s_mario_instance_pool.objects[ marioId ])->globalState );
 
-    //if( giveWingcap )
-    //{
-    //    gMarioState->flags |= MARIO_WING_CAP;
-    //}
+    if( isInput && giveWingcap )
+    {
+        gMarioState->flags |= MARIO_WING_CAP;
+    }
 
     struct MarioBodyState *bodyState = &g_state->mgBodyStates[0];
     if(isInput)
