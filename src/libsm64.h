@@ -31,7 +31,7 @@ struct SM64MarioState
     int16_t health;
     
     // Sound info
-    int32_t soundId;
+    uint32_t soundMask;
 };
 
 struct SM64MarioBodyState

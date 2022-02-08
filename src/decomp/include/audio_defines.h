@@ -8,9 +8,7 @@
 // Third Byte: Priority
 // Fourth Byte (Upper Nibble): More bitflags
 // Fourth Byte (Lower Nibble): Sound Status (this is set to SOUND_STATUS_PLAYING when passed to the audio driver.)
-#define SOUND_ARG_LOAD(bank, playFlags, soundID, priority, flags2) (((u32) (bank) << 28)       | \
-                 ((u32) (playFlags) << 24) | ((u32) (soundID) << 16) | ((u32) (priority) << 8) | \
-                 ((u32) (flags2)  << 4)  |  SOUND_STATUS_STARTING)
+#define SOUND_ARG_LOAD(bank, playFlags, soundID, priority, flags2) (0)
 
 #define SOUNDARGS_MASK_BANK         0xF0000000
 #define SOUNDARGS_MASK_SOUNDID      0x00FF0000
@@ -139,34 +137,33 @@
 #define SOUND_MOVING_FLYING                     SOUND_ARG_LOAD(1, 4, 0x17, 0x00, 0)
 #define SOUND_MOVING_ALMOST_DROWNING            SOUND_ARG_LOAD(1, 0xC, 0x18, 0x00, 0)
 #define SOUND_MOVING_AIM_CANNON                 SOUND_ARG_LOAD(1, 0xD, 0x19, 0x20, 0)
-#define SOUND_MOVING_UNK1A                      0x101A // ?
+#define SOUND_MOVING_UNK1A                      0 // ?
 #define SOUND_MOVING_RIDING_SHELL_LAVA          SOUND_ARG_LOAD(1, 4, 0x28, 0x00, 0)
 
 /* Mario Sound Effects */
-// A random number 0-2 is added to the sound ID before playing, producing Yah/Wah/Hoo
-#define SOUND_MARIO_YAH_WAH_HOO      0
-#define SOUND_MARIO_HOOHOO           3
-#define SOUND_MARIO_YAHOO            4
-#define SOUND_MARIO_UH               5
-#define SOUND_MARIO_HRMM             6
-#define SOUND_MARIO_WAH2             7
-#define SOUND_MARIO_WHOA             8
-#define SOUND_MARIO_EEUH             9
-#define SOUND_MARIO_ATTACKED         10
-#define SOUND_MARIO_OOOF             11
-#define SOUND_MARIO_OOOF2            12
-#define SOUND_MARIO_HERE_WE_GO       13
-#define SOUND_MARIO_YAWNING          14
-#define SOUND_MARIO_SNORING1         15
-#define SOUND_MARIO_SNORING2         16
-#define SOUND_MARIO_WAAAOOOW         17
-#define SOUND_MARIO_HAHA             18
-#define SOUND_MARIO_HAHA_2           19
-#define SOUND_MARIO_UH2              20
-#define SOUND_MARIO_UH2_2            21
-#define SOUND_MARIO_ON_FIRE          22
-#define SOUND_MARIO_DYING            23
-#define SOUND_MARIO_PANTING_COLD     24
+#define SOUND_MARIO_YAH_WAH_HOO      0x00000001
+#define SOUND_MARIO_HOOHOO           0x00000002
+#define SOUND_MARIO_YAHOO            0x00000004
+#define SOUND_MARIO_UH               0x00000008
+#define SOUND_MARIO_HRMM             0x00000010
+#define SOUND_MARIO_WAH2             0x00000020
+#define SOUND_MARIO_WHOA             0x00000040
+#define SOUND_MARIO_EEUH             0x00000080
+#define SOUND_MARIO_ATTACKED         0x00000100
+#define SOUND_MARIO_OOOF             0x00000200
+#define SOUND_MARIO_OOOF2            0x00000400
+#define SOUND_MARIO_HERE_WE_GO       0x00000800
+#define SOUND_MARIO_YAWNING          0x00001000
+#define SOUND_MARIO_SNORING1         0x00002000
+#define SOUND_MARIO_SNORING2         0x00004000
+#define SOUND_MARIO_WAAAOOOW         0x00008000
+#define SOUND_MARIO_HAHA             0x00010000
+#define SOUND_MARIO_HAHA_2           0x00020000
+#define SOUND_MARIO_UH2              0x00040000
+#define SOUND_MARIO_UH2_2            0x00080000
+#define SOUND_MARIO_ON_FIRE          0x00100000
+#define SOUND_MARIO_DYING            0x00200000
+#define SOUND_MARIO_PANTING_COLD     0x00400000
 
 // A random number 0-2 is added to the sound ID before playing
 #define SOUND_MARIO_PANTING                     SOUND_ARG_LOAD(2, 4, 0x18, 0x80, 8)
@@ -177,7 +174,7 @@
 #define SOUND_MARIO_PUNCH_YAH                   SOUND_ARG_LOAD(2, 4, 0x1E, 0x80, 8)
 #define SOUND_MARIO_PUNCH_HOO                   SOUND_ARG_LOAD(2, 4, 0x1F, 0x80, 8)
 #define SOUND_MARIO_MAMA_MIA                    SOUND_ARG_LOAD(2, 4, 0x20, 0x80, 8)
-#define SOUND_MARIO_OKEY_DOKEY                  0x2021
+#define SOUND_MARIO_OKEY_DOKEY                  0
 #define SOUND_MARIO_GROUND_POUND_WAH            SOUND_ARG_LOAD(2, 4, 0x22, 0x80, 8)
 #define SOUND_MARIO_DROWNING                    SOUND_ARG_LOAD(2, 4, 0x23, 0xF0, 8)
 #define SOUND_MARIO_PUNCH_WAH                   SOUND_ARG_LOAD(2, 4, 0x24, 0x80, 8)
@@ -215,7 +212,7 @@
 /* not verified */ #define SOUND_GENERAL_CLOSE_WOOD_DOOR    SOUND_ARG_LOAD(3, 0, 0x05, 0xC0, 8)
 /* not verified */ #define SOUND_GENERAL_OPEN_IRON_DOOR     SOUND_ARG_LOAD(3, 0, 0x06, 0xC0, 8)
 /* not verified */ #define SOUND_GENERAL_CLOSE_IRON_DOOR    SOUND_ARG_LOAD(3, 0, 0x07, 0xC0, 8)
-/* not verified */ #define SOUND_GENERAL_BUBBLES            0x3008
+/* not verified */ #define SOUND_GENERAL_BUBBLES            0
 /* not verified */ #define SOUND_GENERAL_MOVING_WATER       SOUND_ARG_LOAD(3, 0, 0x09, 0x00, 8)
 /* not verified */ #define SOUND_GENERAL_SWISH_WATER        SOUND_ARG_LOAD(3, 0, 0x0A, 0x00, 8)
 /* not verified */ #define SOUND_GENERAL_QUIET_BUBBLE       SOUND_ARG_LOAD(3, 0, 0x0B, 0x00, 8)
@@ -227,14 +224,14 @@
 /* not verified */ #define SOUND_GENERAL_COIN_WATER         SOUND_ARG_LOAD(3, 8, 0x12, 0x80, 8)
 /* not verified */ #define SOUND_GENERAL_SHORT_STAR         SOUND_ARG_LOAD(3, 0, 0x16, 0x00, 9)
 /* not verified */ #define SOUND_GENERAL_BIG_CLOCK          SOUND_ARG_LOAD(3, 0, 0x17, 0x00, 8)
-/* not verified */ #define SOUND_GENERAL_LOUD_POUND         0x3018 // _TERRAIN?
-/* not verified */ #define SOUND_GENERAL_LOUD_POUND2        0x3019
-/* not verified */ #define SOUND_GENERAL_SHORT_POUND1       0x301A
-/* not verified */ #define SOUND_GENERAL_SHORT_POUND2       0x301B
-/* not verified */ #define SOUND_GENERAL_SHORT_POUND3       0x301C
-/* not verified */ #define SOUND_GENERAL_SHORT_POUND4       0x301D
-/* not verified */ #define SOUND_GENERAL_SHORT_POUND5       0x301E
-/* not verified */ #define SOUND_GENERAL_SHORT_POUND6       0x301F
+/* not verified */ #define SOUND_GENERAL_LOUD_POUND         0 // _TERRAIN?
+/* not verified */ #define SOUND_GENERAL_LOUD_POUND2        0
+/* not verified */ #define SOUND_GENERAL_SHORT_POUND1       0
+/* not verified */ #define SOUND_GENERAL_SHORT_POUND2       0
+/* not verified */ #define SOUND_GENERAL_SHORT_POUND3       0
+/* not verified */ #define SOUND_GENERAL_SHORT_POUND4       0
+/* not verified */ #define SOUND_GENERAL_SHORT_POUND5       0
+/* not verified */ #define SOUND_GENERAL_SHORT_POUND6       0
 #define SOUND_GENERAL_OPEN_CHEST                            SOUND_ARG_LOAD(3, 1, 0x20, 0x80, 8)
 /* not verified */ #define SOUND_GENERAL_CLAM_SHELL1        SOUND_ARG_LOAD(3, 1, 0x22, 0x80, 8)
 /* not verified */ #define SOUND_GENERAL_BOX_LANDING        SOUND_ARG_LOAD(3, 0, 0x24, 0x00, 8)
@@ -256,8 +253,8 @@
 /* not verified */ #define SOUND_GENERAL_COIN_SPURT_2       SOUND_ARG_LOAD(3, 8, 0x30, 0x00, 8)
 /* not verified */ #define SOUND_GENERAL_COIN_SPURT_EU      SOUND_ARG_LOAD(3, 8, 0x30, 0x20, 8)
 
-/* not verified */ #define SOUND_GENERAL_EXPLOSION6         0x3031
-/* not verified */ #define SOUND_GENERAL_UNK32              0x3032
+/* not verified */ #define SOUND_GENERAL_EXPLOSION6         0
+/* not verified */ #define SOUND_GENERAL_UNK32              0
 /* not verified */ #define SOUND_GENERAL_BOAT_TILT1         SOUND_ARG_LOAD(3, 0, 0x34, 0x40, 8)
 /* not verified */ #define SOUND_GENERAL_BOAT_TILT2         SOUND_ARG_LOAD(3, 0, 0x35, 0x40, 8)
 /* not verified */ #define SOUND_GENERAL_COIN_DROP          SOUND_ARG_LOAD(3, 0, 0x36, 0x40, 8)
@@ -284,8 +281,8 @@
 /* not verified */ #define SOUND_GENERAL_UNK46              SOUND_ARG_LOAD(3, 0, 0x46, 0x80, 8)
 /* not verified */ #define SOUND_GENERAL_CANNON_UP          SOUND_ARG_LOAD(3, 0, 0x47, 0x80, 8)
 /* not verified */ #define SOUND_GENERAL_GRINDEL_ROLL       SOUND_ARG_LOAD(3, 0, 0x48, 0x00, 8)
-/* not verified */ #define SOUND_GENERAL_EXPLOSION7         0x3049
-/* not verified */ #define SOUND_GENERAL_SHAKE_COFFIN       0x304A
+/* not verified */ #define SOUND_GENERAL_EXPLOSION7         0
+/* not verified */ #define SOUND_GENERAL_SHAKE_COFFIN       0
 /* not verified */ #define SOUND_GENERAL_RACE_GUN_SHOT      SOUND_ARG_LOAD(3, 1, 0x4D, 0x40, 8)
 /* not verified */ #define SOUND_GENERAL_STAR_DOOR_OPEN     SOUND_ARG_LOAD(3, 0, 0x4E, 0xC0, 8)
 /* not verified */ #define SOUND_GENERAL_STAR_DOOR_CLOSE    SOUND_ARG_LOAD(3, 0, 0x4F, 0xC0, 8)
@@ -319,7 +316,7 @@
 /* not verified */ #define SOUND_GENERAL_ENEMY_ALERT1       SOUND_ARG_LOAD(3, 0, 0x6F, 0x30, 8)
 /* not verified */ #define SOUND_GENERAL_YOSHI_TALK         SOUND_ARG_LOAD(3, 0, 0x70, 0x30, 8)
 /* not verified */ #define SOUND_GENERAL_SPLATTERING        SOUND_ARG_LOAD(3, 0, 0x71, 0x30, 8)
-/* not verified */ #define SOUND_GENERAL_BOING3             0x3072
+/* not verified */ #define SOUND_GENERAL_BOING3             0
 /* not verified */ #define SOUND_GENERAL_GRAND_STAR         SOUND_ARG_LOAD(3, 0, 0x73, 0x00, 8)
 /* not verified */ #define SOUND_GENERAL_GRAND_STAR_JUMP    SOUND_ARG_LOAD(3, 0, 0x74, 0x00, 8)
 /* not verified */ #define SOUND_GENERAL_BOAT_ROCK          SOUND_ARG_LOAD(3, 0, 0x75, 0x00, 8)
@@ -332,8 +329,8 @@
 /* not verified */ #define SOUND_ENV_DRONING1               SOUND_ARG_LOAD(4, 1, 0x03, 0x00, 0)
 /* not verified */ #define SOUND_ENV_DRONING2               SOUND_ARG_LOAD(4, 0, 0x04, 0x00, 0)
 /* not verified */ #define SOUND_ENV_WIND1                  SOUND_ARG_LOAD(4, 0, 0x05, 0x00, 0)
-/* not verified */ #define SOUND_ENV_MOVING_SAND_SNOW       0x4006
-/* not verified */ #define SOUND_ENV_UNK07                  0x4007
+/* not verified */ #define SOUND_ENV_MOVING_SAND_SNOW       0
+/* not verified */ #define SOUND_ENV_UNK07                  0
 /* not verified */ #define SOUND_ENV_ELEVATOR2              SOUND_ARG_LOAD(4, 0, 0x08, 0x00, 0)
 /* not verified */ #define SOUND_ENV_WATER                  SOUND_ARG_LOAD(4, 0, 0x09, 0x00, 0)
 /* not verified */ #define SOUND_ENV_UNKNOWN2               SOUND_ARG_LOAD(4, 0, 0x0A, 0x00, 0)
@@ -344,7 +341,7 @@
 /* not verified */ #define SOUND_ENV_MOVINGSAND             SOUND_ARG_LOAD(4, 0, 0x0E, 0x00, 0)
 /* not verified */ #define SOUND_ENV_MERRY_GO_ROUND_CREAKING    SOUND_ARG_LOAD(4, 0, 0x0F, 0x40, 0)
 /* not verified */ #define SOUND_ENV_WIND2                  SOUND_ARG_LOAD(4, 0, 0x10, 0x80, 0)
-/* not verified */ #define SOUND_ENV_UNK12                  0x4012
+/* not verified */ #define SOUND_ENV_UNK12                  0
 /* not verified */ #define SOUND_ENV_SLIDING                SOUND_ARG_LOAD(4, 0, 0x13, 0x00, 0)
 /* not verified */ #define SOUND_ENV_STAR                   SOUND_ARG_LOAD(4, 0, 0x14, 0x00, 1)
 /* not verified */ #define SOUND_ENV_UNKNOWN4               SOUND_ARG_LOAD(4, 1, 0x15, 0x00, 0)
@@ -368,7 +365,7 @@
 /* not verified */ #define SOUND_OBJ_CANNON1                SOUND_ARG_LOAD(5, 0, 0x0D, 0xF0, 8)
 /* not verified */ #define SOUND_OBJ_CANNON2                SOUND_ARG_LOAD(5, 0, 0x0E, 0xF0, 8)
 /* not verified */ #define SOUND_OBJ_CANNON3                SOUND_ARG_LOAD(5, 0, 0x0F, 0xF0, 8)
-/* not verified */ #define SOUND_OBJ_JUMP_WALK_WATER        0x5012
+/* not verified */ #define SOUND_OBJ_JUMP_WALK_WATER        0
 /* not verified */ #define SOUND_OBJ_UNKNOWN2               SOUND_ARG_LOAD(5, 0, 0x13, 0x00, 8)
 #define SOUND_OBJ_MRI_DEATH                                 SOUND_ARG_LOAD(5, 0, 0x14, 0x00, 8)
 /* not verified */ #define SOUND_OBJ_POUNDING1              SOUND_ARG_LOAD(5, 0, 0x15, 0x50, 8)
@@ -387,10 +384,10 @@
 #define SOUND_OBJ_UKIKI_CHATTER_LONG                        SOUND_ARG_LOAD(5, 0, 0x21, 0x00, 8)
 #define SOUND_OBJ_MONTY_MOLE_ATTACK                         SOUND_ARG_LOAD(5, 0, 0x22, 0x00, 8)
 #define SOUND_OBJ_EVIL_LAKITU_THROW                         SOUND_ARG_LOAD(5, 0, 0x22, 0x20, 8)
-/* not verified */ #define SOUND_OBJ_UNK23                  0x5023
+/* not verified */ #define SOUND_OBJ_UNK23                  0
 #define SOUND_OBJ_DYING_ENEMY1                              SOUND_ARG_LOAD(5, 0, 0x24, 0x40, 8)
 /* not verified */ #define SOUND_OBJ_CANNON4                SOUND_ARG_LOAD(5, 0, 0x25, 0x40, 8)
-/* not verified */ #define SOUND_OBJ_DYING_ENEMY2           0x5026
+/* not verified */ #define SOUND_OBJ_DYING_ENEMY2           0
 #define SOUND_OBJ_BOBOMB_WALK                               SOUND_ARG_LOAD(5, 0, 0x27, 0x00, 8)
 /* not verified */ #define SOUND_OBJ_SOMETHING_LANDING      SOUND_ARG_LOAD(5, 0, 0x28, 0x80, 8)
 /* not verified */ #define SOUND_OBJ_DIVING_IN_WATER        SOUND_ARG_LOAD(5, 0, 0x29, 0xA0, 8)
@@ -437,7 +434,7 @@
 /* not verified */ #define SOUND_OBJ_SPINY_UNK59            SOUND_ARG_LOAD(5, 0, 0x59, 0x10, 8)
 #define SOUND_OBJ_WIGGLER_HIGH_PITCH                        SOUND_ARG_LOAD(5, 0, 0x5C, 0x40, 8)
 #define SOUND_OBJ_HEAVEHO_TOSSED                            SOUND_ARG_LOAD(5, 0, 0x5D, 0x40, 8)
-/* not verified */ #define SOUND_OBJ_WIGGLER_DEATH          0x505E
+/* not verified */ #define SOUND_OBJ_WIGGLER_DEATH          0
 #define SOUND_OBJ_BOWSER_INTRO_LAUGH                        SOUND_ARG_LOAD(5, 0, 0x5F, 0x80, 9)
 /* not verified */ #define SOUND_OBJ_ENEMY_DEATH_HIGH       SOUND_ARG_LOAD(5, 0, 0x60, 0xB0, 8)
 /* not verified */ #define SOUND_OBJ_ENEMY_DEATH_LOW        SOUND_ARG_LOAD(5, 0, 0x61, 0xB0, 8)
@@ -459,7 +456,7 @@
 #define SOUND_OBJ_ENEMY_DEFEAT_SHRINK                       SOUND_ARG_LOAD(5, 0, 0x74, 0x40, 8)
 
 #define SOUND_AIR_BOWSER_SPIT_FIRE              SOUND_ARG_LOAD(6, 0, 0x00, 0x00, 0)
-#define SOUND_AIR_UNK01                         0x6001 // ?
+#define SOUND_AIR_UNK01                         0
 #define SOUND_AIR_LAKITU_FLY                    SOUND_ARG_LOAD(6, 0, 0x02, 0x80, 0)
 #define SOUND_AIR_LAKITU_FLY_HIGHPRIO           SOUND_ARG_LOAD(6, 0, 0x02, 0xFF, 0)
 #define SOUND_AIR_AMP_BUZZ                      SOUND_ARG_LOAD(6, 0, 0x03, 0x40, 0)
@@ -467,7 +464,7 @@
 #define SOUND_AIR_BLOW_WIND                     SOUND_ARG_LOAD(6, 0, 0x04, 0x40, 0)
 #define SOUND_AIR_ROUGH_SLIDE                   SOUND_ARG_LOAD(6, 0, 0x05, 0x00, 0)
 #define SOUND_AIR_HEAVEHO_MOVE                  SOUND_ARG_LOAD(6, 0, 0x06, 0x40, 0)
-#define SOUND_AIR_UNK07                         0x6007 // ?
+#define SOUND_AIR_UNK07                         0
 #define SOUND_AIR_BOBOMB_LIT_FUSE               SOUND_ARG_LOAD(6, 0, 0x08, 0x60, 0)
 #define SOUND_AIR_HOWLING_WIND                  SOUND_ARG_LOAD(6, 0, 0x09, 0x80, 0)
 #define SOUND_AIR_CHUCKYA_MOVE                  SOUND_ARG_LOAD(6, 0, 0x0A, 0x40, 0)
@@ -476,7 +473,7 @@
 
 /* Menu Sound Effects */
 #define SOUND_MENU_CHANGE_SELECT                            SOUND_ARG_LOAD(7, 0, 0x00, 0xF8, 8)
-/* not verified */ #define SOUND_MENU_REVERSE_PAUSE         0x7001
+/* not verified */ #define SOUND_MENU_REVERSE_PAUSE         0
 #define SOUND_MENU_PAUSE                                    SOUND_ARG_LOAD(7, 0, 0x02, 0xF0, 8)
 #define SOUND_MENU_PAUSE_HIGHPRIO                           SOUND_ARG_LOAD(7, 0, 0x02, 0xFF, 8)
 #define SOUND_MENU_PAUSE_2                                  SOUND_ARG_LOAD(7, 0, 0x03, 0xFF, 8)
@@ -492,7 +489,7 @@
 /* not verified */ #define SOUND_MENU_POWER_METER           SOUND_ARG_LOAD(7, 0, 0x0D, 0x00, 8)
 #define SOUND_MENU_CAMERA_BUZZ                              SOUND_ARG_LOAD(7, 0, 0x0E, 0x00, 8)
 #define SOUND_MENU_CAMERA_TURN                              SOUND_ARG_LOAD(7, 0, 0x0F, 0x00, 8)
-/* not verified */ #define SOUND_MENU_UNK10                 0x7010
+/* not verified */ #define SOUND_MENU_UNK10                 0
 #define SOUND_MENU_CLICK_FILE_SELECT                        SOUND_ARG_LOAD(7, 0, 0x11, 0x00, 8)
 /* not verified */ #define SOUND_MENU_MESSAGE_NEXT_PAGE     SOUND_ARG_LOAD(7, 0, 0x13, 0x00, 8)
 #define SOUND_MENU_COIN_ITS_A_ME_MARIO                      SOUND_ARG_LOAD(7, 0, 0x14, 0x00, 8)
@@ -502,13 +499,13 @@
 #define SOUND_MENU_BOWSER_LAUGH                             SOUND_ARG_LOAD(7, 0, 0x18, 0x80, 8)
 #define SOUND_MENU_ENTER_HOLE                               SOUND_ARG_LOAD(7, 1, 0x19, 0x80, 8)
 /* not verified */ #define SOUND_MENU_CLICK_CHANGE_VIEW     SOUND_ARG_LOAD(7, 0, 0x1A, 0x80, 8)
-/* not verified */ #define SOUND_MENU_CAMERA_UNUSED1        0x701B
-/* not verified */ #define SOUND_MENU_CAMERA_UNUSED2        0x701C
+/* not verified */ #define SOUND_MENU_CAMERA_UNUSED1        0
+/* not verified */ #define SOUND_MENU_CAMERA_UNUSED2        0
 /* not verified */ #define SOUND_MENU_MARIO_CASTLE_WARP     SOUND_ARG_LOAD(7, 0, 0x1D, 0xB0, 8)
 #define SOUND_MENU_STAR_SOUND                               SOUND_ARG_LOAD(7, 0, 0x1E, 0xFF, 8)
 #define SOUND_MENU_THANK_YOU_PLAYING_MY_GAME                SOUND_ARG_LOAD(7, 0, 0x1F, 0xFF, 8)
-/* not verified */ #define SOUND_MENU_READ_A_SIGN           0x7020
-/* not verified */ #define SOUND_MENU_EXIT_A_SIGN           0x7021
+/* not verified */ #define SOUND_MENU_READ_A_SIGN           0
+/* not verified */ #define SOUND_MENU_EXIT_A_SIGN           0
 /* not verified */ #define SOUND_MENU_MARIO_CASTLE_WARP2    SOUND_ARG_LOAD(7, 0, 0x22, 0x20, 8)
 #define SOUND_MENU_STAR_SOUND_OKEY_DOKEY                    SOUND_ARG_LOAD(7, 0, 0x23, 0xFF, 8)
 #define SOUND_MENU_STAR_SOUND_LETS_A_GO                     SOUND_ARG_LOAD(7, 0, 0x24, 0xFF, 8)

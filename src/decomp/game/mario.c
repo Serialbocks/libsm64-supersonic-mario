@@ -264,7 +264,7 @@ void play_mario_jump_sound(struct MarioState *m) {
                        m->marioObj->header.gfx.cameraToObject);
         } else {
 #endif
-            play_sound(SOUND_MARIO_YAH_WAH_HOO + ((gAudioRandom % 3) << 16),
+            play_sound(SOUND_MARIO_YAH_WAH_HOO,
                        m->marioObj->header.gfx.cameraToObject);
 #ifndef VERSION_JP
         }

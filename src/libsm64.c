@@ -219,7 +219,7 @@ SM64_LIB_FN void sm64_mario_tick(
             gController.stickY *= -1;
             gController.stickX *= -1;
         }
-        outState->soundId = -1;
+        gSoundMask = 0;
     }
     else
     {
@@ -258,7 +258,7 @@ SM64_LIB_FN void sm64_mario_tick(
         outState->velY = gMarioState->vel[1];
         outState->velZ = gMarioState->vel[2];
         outState->faceAngle = (float)gMarioState->faceAngle[1] / 32768.0f * 3.14159f;
-        outState->soundId = gSoundId;
+        outState->soundMask = gSoundMask;
 
         memcpy(&outBodyState->marioState, outState, sizeof(struct SM64MarioState));
     }

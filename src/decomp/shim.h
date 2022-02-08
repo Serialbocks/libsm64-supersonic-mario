@@ -33,12 +33,12 @@
 #define gMarioState          (&g_state->mgMarioStateVal)
 #define gAreaUpdateCounter   (g_state->mgAreaUpdateCounter)
 #define gBlinkUpdateCounter  (g_state->mgBlinkUpdateCounter)
-#define gSoundId             (g_state->mgSoundId)
+#define gSoundMask           (g_state->mgSoundMask)
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 static void play_sound(s32 soundBits, f32* pos) {
-    gSoundId = soundBits;
+    gSoundMask |= soundBits;
 }
 static void enable_time_stop() {}
 static void disable_time_stop() {}

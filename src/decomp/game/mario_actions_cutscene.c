@@ -1891,7 +1891,7 @@ static s32 jumbo_star_cutscene_taking_off(struct MarioState *m) {
 
         switch (animFrame) {
             case 3:
-                play_sound(SOUND_MARIO_YAH_WAH_HOO + (gAudioRandom % 3 << 16),
+                play_sound(SOUND_MARIO_YAH_WAH_HOO,
                            m->marioObj->header.gfx.cameraToObject);
                 break;
 
