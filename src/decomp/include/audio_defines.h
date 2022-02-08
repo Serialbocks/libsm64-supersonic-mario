@@ -141,29 +141,32 @@
 #define SOUND_MOVING_RIDING_SHELL_LAVA          SOUND_ARG_LOAD(1, 4, 0x28, 0x00, 0)
 
 /* Mario Sound Effects */
-#define SOUND_MARIO_YAH_WAH_HOO      0x00000001
-#define SOUND_MARIO_HOOHOO           0x00000002
-#define SOUND_MARIO_YAHOO            0x00000004
-#define SOUND_MARIO_UH               0x00000008
-#define SOUND_MARIO_HRMM             0x00000010
-#define SOUND_MARIO_WAH2             0x00000020
-#define SOUND_MARIO_WHOA             0x00000040
-#define SOUND_MARIO_EEUH             0x00000080
-#define SOUND_MARIO_ATTACKED         0x00000100
-#define SOUND_MARIO_OOOF             0x00000200
-#define SOUND_MARIO_OOOF2            0x00000400
-#define SOUND_MARIO_HERE_WE_GO       0x00000800
-#define SOUND_MARIO_YAWNING          0x00001000
-#define SOUND_MARIO_SNORING1         0x00002000
-#define SOUND_MARIO_SNORING2         0x00004000
-#define SOUND_MARIO_WAAAOOOW         0x00008000
-#define SOUND_MARIO_HAHA             0x00010000
-#define SOUND_MARIO_HAHA_2           0x00020000
-#define SOUND_MARIO_UH2              0x00040000
-#define SOUND_MARIO_UH2_2            0x00080000
-#define SOUND_MARIO_ON_FIRE          0x00100000
-#define SOUND_MARIO_DYING            0x00200000
-#define SOUND_MARIO_PANTING_COLD     0x00400000
+#define SOUND_MARIO_YAH				0x00000001
+#define SOUND_MARIO_WAH				0x00000002
+#define SOUND_MARIO_HOO				0x00000004
+#define SOUND_MARIO_YAHOO           0x00000008
+
+#define SOUND_MARIO_UH              0
+#define SOUND_MARIO_HRMM            0
+#define SOUND_MARIO_WAH2            0
+#define SOUND_MARIO_WHOA            0
+#define SOUND_MARIO_EEUH            0
+#define SOUND_MARIO_ATTACKED        0
+#define SOUND_MARIO_OOOF            0
+#define SOUND_MARIO_OOOF2           0
+#define SOUND_MARIO_HERE_WE_GO      0
+#define SOUND_MARIO_YAWNING         0
+#define SOUND_MARIO_SNORING1        0
+#define SOUND_MARIO_SNORING2        0
+#define SOUND_MARIO_WAAAOOOW        0
+#define SOUND_MARIO_HAHA            0
+#define SOUND_MARIO_HAHA_2          0
+#define SOUND_MARIO_UH2             0
+#define SOUND_MARIO_UH2_2           0
+#define SOUND_MARIO_ON_FIRE         0
+#define SOUND_MARIO_DYING           0
+#define SOUND_MARIO_PANTING_COLD    0
+#define SOUND_MARIO_HOOHOO          0
 
 // A random number 0-2 is added to the sound ID before playing
 #define SOUND_MARIO_PANTING                     SOUND_ARG_LOAD(2, 4, 0x18, 0x80, 8)
