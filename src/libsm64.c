@@ -219,6 +219,7 @@ SM64_LIB_FN void sm64_mario_tick(
             gController.stickY *= -1;
             gController.stickX *= -1;
         }
+        outState->soundId = -1;
     }
     else
     {
@@ -235,6 +236,7 @@ SM64_LIB_FN void sm64_mario_tick(
         gMarioState->marioObj->header.gfx.pos[2] = outBodyState->marioState.posZ;
         gBlinkUpdateCounter = outBodyState->areaUpdateCounter;
     }
+    
 
     apply_mario_platform_displacement();
     bhv_mario_update(isInput);
@@ -256,6 +258,8 @@ SM64_LIB_FN void sm64_mario_tick(
         outState->velY = gMarioState->vel[1];
         outState->velZ = gMarioState->vel[2];
         outState->faceAngle = (float)gMarioState->faceAngle[1] / 32768.0f * 3.14159f;
+        outState->soundId = gSoundId;
+
         memcpy(&outBodyState->marioState, outState, sizeof(struct SM64MarioState));
     }
 }

@@ -144,29 +144,29 @@
 
 /* Mario Sound Effects */
 // A random number 0-2 is added to the sound ID before playing, producing Yah/Wah/Hoo
-#define SOUND_MARIO_YAH_WAH_HOO                         SOUND_ARG_LOAD(2, 4, 0x00, 0x80, 8)
-/* not verified */ #define SOUND_MARIO_HOOHOO           SOUND_ARG_LOAD(2, 4, 0x03, 0x80, 8)
-/* not verified */ #define SOUND_MARIO_YAHOO            SOUND_ARG_LOAD(2, 4, 0x04, 0x80, 8)
-/* not verified */ #define SOUND_MARIO_UH               SOUND_ARG_LOAD(2, 4, 0x05, 0x80, 8)
-/* not verified */ #define SOUND_MARIO_HRMM             SOUND_ARG_LOAD(2, 4, 0x06, 0x80, 8)
-/* not verified */ #define SOUND_MARIO_WAH2             SOUND_ARG_LOAD(2, 4, 0x07, 0x80, 8)
-/* not verified */ #define SOUND_MARIO_WHOA             SOUND_ARG_LOAD(2, 4, 0x08, 0xC0, 8)
-/* not verified */ #define SOUND_MARIO_EEUH             SOUND_ARG_LOAD(2, 4, 0x09, 0x80, 8)
-/* not verified */ #define SOUND_MARIO_ATTACKED         SOUND_ARG_LOAD(2, 4, 0x0A, 0xFF, 8)
-/* not verified */ #define SOUND_MARIO_OOOF             SOUND_ARG_LOAD(2, 4, 0x0B, 0x80, 8)
-/* not verified */ #define SOUND_MARIO_OOOF2            SOUND_ARG_LOAD(2, 4, 0x0B, 0xD0, 8)
-#define SOUND_MARIO_HERE_WE_GO                          SOUND_ARG_LOAD(2, 4, 0x0C, 0x80, 8)
-/* not verified */ #define SOUND_MARIO_YAWNING          SOUND_ARG_LOAD(2, 4, 0x0D, 0x80, 8)
-#define SOUND_MARIO_SNORING1                            SOUND_ARG_LOAD(2, 4, 0x0E, 0x80, 8)
-#define SOUND_MARIO_SNORING2                            SOUND_ARG_LOAD(2, 4, 0x0F, 0x80, 8)
-/* not verified */ #define SOUND_MARIO_WAAAOOOW         SOUND_ARG_LOAD(2, 4, 0x10, 0xC0, 8)
-/* not verified */ #define SOUND_MARIO_HAHA             SOUND_ARG_LOAD(2, 4, 0x11, 0x80, 8)
-/* not verified */ #define SOUND_MARIO_HAHA_2           SOUND_ARG_LOAD(2, 4, 0x11, 0xF0, 8)
-/* not verified */ #define SOUND_MARIO_UH2              SOUND_ARG_LOAD(2, 4, 0x13, 0xD0, 8)
-/* not verified */ #define SOUND_MARIO_UH2_2            SOUND_ARG_LOAD(2, 4, 0x13, 0x80, 8)
-/* not verified */ #define SOUND_MARIO_ON_FIRE          SOUND_ARG_LOAD(2, 4, 0x14, 0xA0, 8)
-/* not verified */ #define SOUND_MARIO_DYING            SOUND_ARG_LOAD(2, 4, 0x15, 0xFF, 8)
-#define SOUND_MARIO_PANTING_COLD                        SOUND_ARG_LOAD(2, 4, 0x16, 0x80, 8)
+#define SOUND_MARIO_YAH_WAH_HOO      0
+#define SOUND_MARIO_HOOHOO           3
+#define SOUND_MARIO_YAHOO            4
+#define SOUND_MARIO_UH               5
+#define SOUND_MARIO_HRMM             6
+#define SOUND_MARIO_WAH2             7
+#define SOUND_MARIO_WHOA             8
+#define SOUND_MARIO_EEUH             9
+#define SOUND_MARIO_ATTACKED         10
+#define SOUND_MARIO_OOOF             11
+#define SOUND_MARIO_OOOF2            12
+#define SOUND_MARIO_HERE_WE_GO       13
+#define SOUND_MARIO_YAWNING          14
+#define SOUND_MARIO_SNORING1         15
+#define SOUND_MARIO_SNORING2         16
+#define SOUND_MARIO_WAAAOOOW         17
+#define SOUND_MARIO_HAHA             18
+#define SOUND_MARIO_HAHA_2           19
+#define SOUND_MARIO_UH2              20
+#define SOUND_MARIO_UH2_2            21
+#define SOUND_MARIO_ON_FIRE          22
+#define SOUND_MARIO_DYING            23
+#define SOUND_MARIO_PANTING_COLD     24
 
 // A random number 0-2 is added to the sound ID before playing
 #define SOUND_MARIO_PANTING                     SOUND_ARG_LOAD(2, 4, 0x18, 0x80, 8)

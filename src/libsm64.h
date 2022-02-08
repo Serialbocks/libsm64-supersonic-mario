@@ -29,6 +29,9 @@ struct SM64MarioState
     float velX, velY, velZ;
     float faceAngle;
     int16_t health;
+    
+    // Sound info
+    int32_t soundId;
 };
 
 struct SM64MarioBodyState
