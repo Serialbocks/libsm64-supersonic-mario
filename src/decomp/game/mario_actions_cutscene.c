@@ -1871,6 +1871,8 @@ static void jumbo_star_cutscene_falling(struct MarioState *m) {
 static s32 jumbo_star_cutscene_taking_off(struct MarioState *m) {
     struct Object *marioObj = m->marioObj;
     s32 animFrame;
+    u32 randInt;
+    u32 randSound;
 
     if (m->actionState == 0) {
         set_mario_animation(m, MARIO_ANIM_FINAL_BOWSER_RAISE_HAND_SPIN);
@@ -1891,8 +1893,8 @@ static s32 jumbo_star_cutscene_taking_off(struct MarioState *m) {
 
         switch (animFrame) {
             case 3:
-                u32 randInt = gAreaUpdateCounter % 3;
-                u32 randSound = randInt == 0 ? SOUND_MARIO_YAH : randInt == 1 ? SOUND_MARIO_WAH : SOUND_MARIO_HOO;
+                randInt = gAreaUpdateCounter % 3;
+                randSound = randInt == 0 ? SOUND_MARIO_YAH : randInt == 1 ? SOUND_MARIO_WAH : SOUND_MARIO_HOO;
                 play_sound(randSound,
                            m->marioObj->header.gfx.cameraToObject);
                 break;
