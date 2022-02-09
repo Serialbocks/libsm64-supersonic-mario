@@ -145,6 +145,7 @@
 #define SOUND_MARIO_WAH				0x00000002
 #define SOUND_MARIO_HOO				0x00000004
 #define SOUND_MARIO_YAHOO           0x00000008
+#define SOUND_MARIO_HOOHOO          0x00000010
 
 #define SOUND_MARIO_UH              0
 #define SOUND_MARIO_HRMM            0
@@ -166,7 +167,7 @@
 #define SOUND_MARIO_ON_FIRE         0
 #define SOUND_MARIO_DYING           0
 #define SOUND_MARIO_PANTING_COLD    0
-#define SOUND_MARIO_HOOHOO          0
+
 
 // A random number 0-2 is added to the sound ID before playing
 #define SOUND_MARIO_PANTING                     SOUND_ARG_LOAD(2, 4, 0x18, 0x80, 8)
