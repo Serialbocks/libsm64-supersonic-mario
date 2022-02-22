@@ -9,9 +9,23 @@ def main():
     defPath = outputBasePath + 'sm64.def'
     libPath = outputBasePath + 'sm64.lib'
 
-    vsToolsBasePath = '\"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\\bin\\'
-    dumpbinPath = vsToolsBasePath + 'dumpbin\"'
-    libCommandPath = vsToolsBasePath + 'lib.exe\"'
+    vsToolsBasePaths = [
+        'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\\bin\\',
+        'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\Hostx64\\x64\\'
+    ]
+
+    vsToolsBasePath = ""
+    for basePath in vsToolsBasePaths:
+        if os.path.isdir(basePath):
+            vsToolsBasePath = basePath
+            break
+
+    if vsToolsBasePath == "":
+        print('ERROR: VS tools path not found. Exiting.')
+        return
+
+    dumpbinPath = '\"' + vsToolsBasePath + 'dumpbin\"'
+    libCommandPath = '\"' + vsToolsBasePath + 'lib.exe\"'
 
     bakkesmodLibDir = 'C:\\Users\\John\\AppData\\Roaming\\bakkesmod\\bakkesmod\libs\\'
     bakkesmodDllPath = bakkesmodLibDir + 'sm64.dll'
