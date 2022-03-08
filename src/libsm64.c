@@ -206,13 +206,6 @@ SM64_LIB_FN void sm64_mario_tick(
         gController.stickY = 64.0f * inputs->stickY;
         gController.stickMag = sqrtf( gController.stickX*gController.stickX + gController.stickY*gController.stickY );
 
-        memcpy( outBodyState, bodyState, sizeof( struct MarioBodyState ));
-        outBodyState->animFrame = gMarioState->marioObj->header.gfx.animInfo.animFrame;
-        outBodyState->animYTrans = gMarioState->marioObj->header.gfx.animInfo.animYTrans;
-        outBodyState->animIndex = current_anim_index();
-        outBodyState->gfxFaceAngle = gMarioState->marioObj->header.gfx.angle[1];
-        outBodyState->areaUpdateCounter = gAreaUpdateCounter;
-
         // If mario is flying, invert the controls
         if(bodyState->action & ACT_FLAG_SWIMMING_OR_FLYING)
         {
@@ -248,6 +241,13 @@ SM64_LIB_FN void sm64_mario_tick(
 
     if(isInput)
     {
+        memcpy( outBodyState, bodyState, sizeof( struct MarioBodyState ));
+        outBodyState->animFrame = gMarioState->marioObj->header.gfx.animInfo.animFrame;
+        outBodyState->animYTrans = gMarioState->marioObj->header.gfx.animInfo.animYTrans;
+        outBodyState->animIndex = current_anim_index();
+        outBodyState->gfxFaceAngle = gMarioState->marioObj->header.gfx.angle[1];
+        outBodyState->areaUpdateCounter = gAreaUpdateCounter;
+
         gAreaUpdateCounter++;
         gBlinkUpdateCounter = gAreaUpdateCounter;
         outState->health = gMarioState->health;
