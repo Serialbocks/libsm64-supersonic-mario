@@ -145,8 +145,10 @@
 #define SOUND_MARIO_HOO				0x00000004
 #define SOUND_MARIO_YAHOO           0x00000008
 #define SOUND_MARIO_HOOHOO          0x00000010
-#define SOUND_MARIO_PUNCH_HOO       0x00000020
-#define SOUND_ACTION_TERRAIN_STEP   0x00000040
+#define SOUND_MARIO_PUNCH_YAH       0x00000020
+#define SOUND_MARIO_PUNCH_WAH       0x00000040
+#define SOUND_MARIO_PUNCH_HOO       0x00000080
+#define SOUND_ACTION_TERRAIN_STEP   0x00000100
 
 #define SOUND_MARIO_UH              0
 #define SOUND_MARIO_HRMM            0
@@ -176,12 +178,12 @@
 #define SOUND_MARIO_COUGHING1                   SOUND_ARG_LOAD(2, 4, 0x1B, 0x80, 8)
 #define SOUND_MARIO_COUGHING2                   SOUND_ARG_LOAD(2, 4, 0x1C, 0x80, 8)
 #define SOUND_MARIO_COUGHING3                   SOUND_ARG_LOAD(2, 4, 0x1D, 0x80, 8)
-#define SOUND_MARIO_PUNCH_YAH                   SOUND_ARG_LOAD(2, 4, 0x1E, 0x80, 8)
+
 #define SOUND_MARIO_MAMA_MIA                    SOUND_ARG_LOAD(2, 4, 0x20, 0x80, 8)
 #define SOUND_MARIO_OKEY_DOKEY                  0
 #define SOUND_MARIO_GROUND_POUND_WAH            SOUND_ARG_LOAD(2, 4, 0x22, 0x80, 8)
 #define SOUND_MARIO_DROWNING                    SOUND_ARG_LOAD(2, 4, 0x23, 0xF0, 8)
-#define SOUND_MARIO_PUNCH_WAH                   SOUND_ARG_LOAD(2, 4, 0x24, 0x80, 8)
+
 
 /* Mario Sound Effects (US/EU only) */
 #define SOUND_PEACH_DEAR_MARIO                  SOUND_ARG_LOAD(2, 4, 0x28, 0xFF, 8)
