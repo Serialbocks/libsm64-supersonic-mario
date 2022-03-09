@@ -65,11 +65,9 @@
 #define SOUND_TERRAIN_SAND      7
 
 #define SOUND_ACTION_TERRAIN_JUMP               SOUND_ARG_LOAD(0, 4, 0x00, 0x80, 8)
-#define SOUND_ACTION_TERRAIN_LANDING            SOUND_ARG_LOAD(0, 4, 0x08, 0x80, 8)
 #define SOUND_ACTION_TERRAIN_BODY_HIT_GROUND    SOUND_ARG_LOAD(0, 4, 0x18, 0x80, 8)
 #define SOUND_ACTION_TERRAIN_STEP_TIPTOE        SOUND_ARG_LOAD(0, 6, 0x20, 0x80, 8)
 #define SOUND_ACTION_TERRAIN_STUCK_IN_GROUND    SOUND_ARG_LOAD(0, 4, 0x48, 0x80, 8)
-#define SOUND_ACTION_TERRAIN_HEAVY_LANDING      SOUND_ARG_LOAD(0, 4, 0x60, 0x80, 8)
 
 #define SOUND_ACTION_METAL_JUMP                         SOUND_ARG_LOAD(0, 4, 0x28, 0x90, 8)
 #define SOUND_ACTION_METAL_LANDING                      SOUND_ARG_LOAD(0, 4, 0x29, 0x90, 8)
@@ -86,7 +84,6 @@
 /* not verified */ #define SOUND_ACTION_UNKNOWN434      SOUND_ARG_LOAD(0, 4, 0x34, 0x80, 8)
 #define SOUND_ACTION_THROW                              SOUND_ARG_LOAD(0, 4, 0x35, 0x80, 8)
 #define SOUND_ACTION_KEY_SWISH                          SOUND_ARG_LOAD(0, 4, 0x36, 0x80, 8)
-#define SOUND_ACTION_SPIN                               SOUND_ARG_LOAD(0, 4, 0x37, 0x80, 8)
 #define SOUND_ACTION_TWIRL                              SOUND_ARG_LOAD(0, 4, 0x38, 0x80, 8) // same sound as spin
 /* not verified */ #define SOUND_ACTION_CLIMB_UP_TREE   SOUND_ARG_LOAD(0, 4, 0x3A, 0x80, 8)
 /* not verified */ #define SOUND_ACTION_CLIMB_DOWN_TREE 0x003B
@@ -113,8 +110,6 @@
 /* not verified */ #define SOUND_ACTION_FLYING_FAST     SOUND_ARG_LOAD(0, 4, 0x56, 0x80, 8) // "swoop"?
 #define SOUND_ACTION_TELEPORT                           SOUND_ARG_LOAD(0, 4, 0x57, 0xC0, 8)
 /* not verified */ #define SOUND_ACTION_UNKNOWN458      SOUND_ARG_LOAD(0, 4, 0x58, 0xA0, 8)
-/* not verified */ #define SOUND_ACTION_BOUNCE_OFF_OBJECT   SOUND_ARG_LOAD(0, 4, 0x59, 0xB0, 8)
-/* not verified */ #define SOUND_ACTION_SIDE_FLIP_UNK   SOUND_ARG_LOAD(0, 4, 0x5A, 0x80, 8)
 #define SOUND_ACTION_READ_SIGN                          SOUND_ARG_LOAD(0, 4, 0x5B, 0xFF, 8)
 /* not verified */ #define SOUND_ACTION_UNKNOWN45C      SOUND_ARG_LOAD(0, 4, 0x5C, 0x80, 8)
 /* not verified */ #define SOUND_ACTION_UNK5D           0x005D
@@ -125,7 +120,6 @@
 
 // Terrain-dependent moving sounds; a value 0-7 is added to the sound ID before
 // playing. See higher up for the different terrain types.
-#define SOUND_MOVING_TERRAIN_SLIDE              SOUND_ARG_LOAD(1, 4, 0x00, 0x00, 0)
 #define SOUND_MOVING_TERRAIN_RIDING_SHELL       SOUND_ARG_LOAD(1, 4, 0x20, 0x00, 0)
 
 #define SOUND_MOVING_LAVA_BURN                  SOUND_ARG_LOAD(1, 4, 0x10, 0x00, 0) // ?
@@ -140,15 +134,23 @@
 #define SOUND_MOVING_RIDING_SHELL_LAVA          SOUND_ARG_LOAD(1, 4, 0x28, 0x00, 0)
 
 /* Mario Sound Effects */
-#define SOUND_MARIO_YAH				0x00000001
-#define SOUND_MARIO_WAH				0x00000002
-#define SOUND_MARIO_HOO				0x00000004
-#define SOUND_MARIO_YAHOO           0x00000008
-#define SOUND_MARIO_HOOHOO          0x00000010
-#define SOUND_MARIO_PUNCH_YAH       0x00000020
-#define SOUND_MARIO_PUNCH_WAH       0x00000040
-#define SOUND_MARIO_PUNCH_HOO       0x00000080
-#define SOUND_ACTION_TERRAIN_STEP   0x00000100
+#define SOUND_MARIO_YAH				            0x00000001
+#define SOUND_MARIO_WAH				            0x00000002
+#define SOUND_MARIO_HOO				            0x00000004
+#define SOUND_MARIO_YAHOO                       0x00000008
+#define SOUND_MARIO_HOOHOO                      0x00000010
+#define SOUND_MARIO_PUNCH_YAH                   0x00000020
+#define SOUND_MARIO_PUNCH_WAH                   0x00000040
+#define SOUND_MARIO_PUNCH_HOO                   0x00000080
+#define SOUND_ACTION_TERRAIN_STEP               0x00000100
+#define SOUND_ACTION_SPIN                       0x00000200
+#define SOUND_ACTION_TERRAIN_HEAVY_LANDING      0x00000400
+#define SOUND_MARIO_GROUND_POUND_WAH            0x00000800
+#define SOUND_ACTION_SIDE_FLIP_UNK              0x00001000
+#define SOUND_MARIO_HAHA                        0x00002000
+#define SOUND_ACTION_TERRAIN_LANDING            0x00004000
+#define SOUND_MOVING_TERRAIN_SLIDE              0x00008000
+#define SOUND_ACTION_BOUNCE_OFF_OBJECT          0x00010000
 
 #define SOUND_MARIO_UH              0
 #define SOUND_MARIO_HRMM            0
@@ -163,7 +165,6 @@
 #define SOUND_MARIO_SNORING1        0
 #define SOUND_MARIO_SNORING2        0
 #define SOUND_MARIO_WAAAOOOW        0
-#define SOUND_MARIO_HAHA            0
 #define SOUND_MARIO_HAHA_2          0
 #define SOUND_MARIO_UH2             0
 #define SOUND_MARIO_UH2_2           0
@@ -181,7 +182,6 @@
 
 #define SOUND_MARIO_MAMA_MIA                    SOUND_ARG_LOAD(2, 4, 0x20, 0x80, 8)
 #define SOUND_MARIO_OKEY_DOKEY                  0
-#define SOUND_MARIO_GROUND_POUND_WAH            SOUND_ARG_LOAD(2, 4, 0x22, 0x80, 8)
 #define SOUND_MARIO_DROWNING                    SOUND_ARG_LOAD(2, 4, 0x23, 0xF0, 8)
 
 
