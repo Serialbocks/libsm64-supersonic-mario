@@ -65,7 +65,6 @@
 #define SOUND_TERRAIN_SAND      7
 
 #define SOUND_ACTION_TERRAIN_JUMP               SOUND_ARG_LOAD(0, 4, 0x00, 0x80, 8)
-#define SOUND_ACTION_TERRAIN_BODY_HIT_GROUND    SOUND_ARG_LOAD(0, 4, 0x18, 0x80, 8)
 #define SOUND_ACTION_TERRAIN_STEP_TIPTOE        SOUND_ARG_LOAD(0, 6, 0x20, 0x80, 8)
 #define SOUND_ACTION_TERRAIN_STUCK_IN_GROUND    SOUND_ARG_LOAD(0, 4, 0x48, 0x80, 8)
 
@@ -98,7 +97,7 @@
 /* not verified */ #define SOUND_ACTION_HIT             SOUND_ARG_LOAD(0, 4, 0x44, 0xC0, 8)
 /* not verified */ #define SOUND_ACTION_HIT_2           SOUND_ARG_LOAD(0, 4, 0x44, 0xB0, 8)
 /* not verified */ #define SOUND_ACTION_HIT_3           SOUND_ARG_LOAD(0, 4, 0x44, 0xA0, 8)
-#define SOUND_ACTION_BONK                               SOUND_ARG_LOAD(0, 4, 0x45, 0xA0, 8)
+
 #define SOUND_ACTION_SHRINK_INTO_BBH                    SOUND_ARG_LOAD(0, 4, 0x46, 0xA0, 8)
 #define SOUND_ACTION_SWIM_FAST                          SOUND_ARG_LOAD(0, 4, 0x47, 0xA0, 8)
 #define SOUND_ACTION_METAL_JUMP_WATER                   SOUND_ARG_LOAD(0, 4, 0x50, 0x90, 8)
@@ -150,16 +149,20 @@
 #define SOUND_MARIO_HAHA                        0x00002000
 #define SOUND_ACTION_TERRAIN_LANDING            0x00004000
 #define SOUND_MOVING_TERRAIN_SLIDE              0x00008000
-#define SOUND_ACTION_BOUNCE_OFF_OBJECT          0x00010000
 
-#define SOUND_MARIO_UH              0
+#define SOUND_ACTION_BONK                       0x00010000
+#define SOUND_MARIO_UH                          0x00020000
+#define SOUND_MARIO_DOH                         0x00040000
+#define SOUND_MARIO_OOOF                        0x00080000
+#define SOUND_MARIO_OOOF2                       0x00080000
+#define SOUND_ACTION_TERRAIN_BODY_HIT_GROUND    0x00100000
+
 #define SOUND_MARIO_HRMM            0
 #define SOUND_MARIO_WAH2            0
 #define SOUND_MARIO_WHOA            0
 #define SOUND_MARIO_EEUH            0
 #define SOUND_MARIO_ATTACKED        0
-#define SOUND_MARIO_OOOF            0
-#define SOUND_MARIO_OOOF2           0
+
 #define SOUND_MARIO_HERE_WE_GO      0
 #define SOUND_MARIO_YAWNING         0
 #define SOUND_MARIO_SNORING1        0
@@ -171,6 +174,7 @@
 #define SOUND_MARIO_ON_FIRE         0
 #define SOUND_MARIO_DYING           0
 #define SOUND_MARIO_PANTING_COLD    0
+#define SOUND_ACTION_BOUNCE_OFF_OBJECT          0
 
 
 // A random number 0-2 is added to the sound ID before playing
@@ -192,7 +196,6 @@
 // Yahoo! (60% chance), Waha! (20%), or Yippee! (20%).
 #define SOUND_MARIO_YAHOO_WAHA_YIPPEE           SOUND_ARG_LOAD(2, 4, 0x2B, 0x80, 8)
 
-#define SOUND_MARIO_DOH                         SOUND_ARG_LOAD(2, 4, 0x30, 0x80, 8)
 #define SOUND_MARIO_GAME_OVER                   SOUND_ARG_LOAD(2, 4, 0x31, 0xFF, 8)
 #define SOUND_MARIO_HELLO                       SOUND_ARG_LOAD(2, 4, 0x32, 0xFF, 8)
 #define SOUND_MARIO_PRESS_START_TO_PLAY         SOUND_ARG_LOAD(2, 4, 0x33, 0xFF, 0xA)
