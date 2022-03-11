@@ -1900,7 +1900,7 @@ s32 act_riding_hoot(struct MarioState *m) {
     return FALSE;
 }
 
-s32 act_flying_triple_jump(struct MarioState *m) {
+s32 act_flying_triple_jump(struct MarioState *m, uint8_t isBoosting) {
 #ifndef VERSION_JP
     if (m->input & (INPUT_B_PRESSED | INPUT_Z_PRESSED)) {
         if (m->area->camera->mode == CAMERA_MODE_BEHIND_MARIO) {
@@ -1959,7 +1959,7 @@ s32 act_flying_triple_jump(struct MarioState *m) {
         set_camera_mode(m->area->camera, CAMERA_MODE_BEHIND_MARIO, 1);
     }
 
-    update_air_without_turn(m, 0);
+    update_air_without_turn(m, isBoosting);
 
     switch (perform_air_step(m, 0)) {
         case AIR_STEP_LANDED:
@@ -2130,7 +2130,7 @@ s32 mario_execute_airborne_action(struct MarioState *m, uint8_t isBoosting) {
         case ACT_GROUND_POUND:         cancel = act_ground_pound(m);                    break;
         case ACT_THROWN_FORWARD:       cancel = act_thrown_forward(m);                  break;
         case ACT_THROWN_BACKWARD:      cancel = act_thrown_backward(m);                 break;
-        case ACT_FLYING_TRIPLE_JUMP:   cancel = act_flying_triple_jump(m);              break;
+        case ACT_FLYING_TRIPLE_JUMP:   cancel = act_flying_triple_jump(m, isBoosting);  break;
         case ACT_SLIDE_KICK:           cancel = act_slide_kick(m, isBoosting);          break; // done
         case ACT_JUMP_KICK:            cancel = act_jump_kick(m);                       break;
         case ACT_FLYING:               cancel = act_flying(m, isBoosting);              break; // done
