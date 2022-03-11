@@ -5,6 +5,6 @@
 
 #include "../include/types.h"
 
-s32 mario_execute_airborne_action(struct MarioState *m);
+s32 mario_execute_airborne_action(struct MarioState *m, uint8_t isBoosting);
 
 #endif // MARIO_ACTIONS_AIRBORNE_H

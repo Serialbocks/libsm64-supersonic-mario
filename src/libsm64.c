@@ -178,7 +178,8 @@ SM64_LIB_FN void sm64_mario_tick(
     struct SM64MarioGeometryBuffers *outBuffers,
     struct SM64MarioBodyState *outBodyState,
     uint8_t isInput,
-    uint8_t giveWingcap)
+    uint8_t giveWingcap,
+    uint8_t isBoosting)
 {
     if( marioId >= s_mario_instance_pool.size || s_mario_instance_pool.objects[marioId] == NULL )
     {
@@ -232,7 +233,7 @@ SM64_LIB_FN void sm64_mario_tick(
     
 
     apply_mario_platform_displacement();
-    bhv_mario_update(isInput);
+    bhv_mario_update(isInput, isBoosting);
     update_mario_platform();
 
     gfx_adapter_bind_output_buffers( outBuffers );

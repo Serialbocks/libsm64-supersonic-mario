@@ -6,6 +6,8 @@
 #include "../include/macros.h"
 #include "../include/types.h"
 
+#define MARIO_MAX_BOOSTING_SPEED 100.0f
+
 s32 is_anim_at_end(struct MarioState *m);
 s32 is_anim_past_end(struct MarioState *m);
 s16 set_mario_animation(struct MarioState *m, s32 targetAnimID);
@@ -47,7 +49,7 @@ s32 check_common_action_exits(struct MarioState *m);
 s32 check_common_hold_action_exits(struct MarioState *m);
 s32 transition_submerged_to_walking(struct MarioState *m);
 s32 set_water_plunge_action(struct MarioState *m);
-s32 execute_mario_action(UNUSED struct Object *o, uint8_t isInput);
+s32 execute_mario_action(UNUSED struct Object *o, uint8_t isInput, uint8_t isBoosting);
 int init_mario(void);
 void init_mario_from_save_file(void);
 
