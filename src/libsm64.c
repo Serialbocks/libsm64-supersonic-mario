@@ -24,6 +24,7 @@
 #include "decomp/game/rendering_graph_node.h"
 #include "decomp/mario/geo.inc.h"
 #include "decomp/game/platform_displacement.h"
+#include "decomp/game/interaction.h"
 
 #include "debug_print.h"
 #include "load_surfaces.h"
@@ -179,7 +180,11 @@ SM64_LIB_FN void sm64_mario_tick(
     struct SM64MarioBodyState *outBodyState,
     uint8_t isInput,
     uint8_t giveWingcap,
-    uint8_t isBoosting)
+    uint8_t isBoosting,
+    uint8_t isAttacked,
+    float attackedPosX,
+    float attackedPosY,
+    float attackedPosZ)
 {
     if( marioId >= s_mario_instance_pool.size || s_mario_instance_pool.objects[marioId] == NULL )
     {
@@ -214,6 +219,11 @@ SM64_LIB_FN void sm64_mario_tick(
             gController.stickX *= -1;
         }
         gSoundMask = 0;
+
+        outState->attacked = 0;
+        if(isAttacked) {
+            outState->attacked = mario_knockback_from_position(gMarioState, attackedPosX, attackedPosY, attackedPosZ, 1);
+        }
     }
     else
     {

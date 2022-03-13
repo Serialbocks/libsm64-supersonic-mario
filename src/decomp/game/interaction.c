@@ -508,6 +508,63 @@ void hit_object_from_below(struct MarioState *m, UNUSED struct Object *o) {
 //     return bonkAction;
 // }
 
+uint8_t mario_knockback_from_position(struct MarioState *m, f32 posX, f32 posY, f32 posZ, s16 strengthIndex) {
+    u32 bonkAction;
+
+    s16 terrainIndex = 0; // 1 = air, 2 = water, 0 = default
+
+    f32 dx = posX - m->pos[0];
+    f32 dz = posZ - m->pos[2];
+
+    s16 angleToObject = atan2s(dz, dx);
+    s16 facingDYaw = angleToObject - m->faceAngle[1];
+
+    if(m->action & ACT_FLAG_INVULNERABLE || m->invincTimer != 0) {
+        return 0;
+    }
+
+    if (m->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) {
+        terrainIndex = 2;
+    } else if (m->action & (ACT_FLAG_AIR | ACT_FLAG_ON_POLE | ACT_FLAG_HANGING)) {
+        terrainIndex = 1;
+    }
+
+    m->faceAngle[1] = angleToObject;
+
+    if (terrainIndex == 2) {
+        if (m->forwardVel < 28.0f) {
+            mario_set_forward_vel(m, 28.0f);
+        }
+
+        if (m->pos[1] >= m->interactObj->oPosY) {
+            if (m->vel[1] < 20.0f) {
+                m->vel[1] = 20.0f;
+            }
+        } else {
+            if (m->vel[1] > 0.0f) {
+                m->vel[1] = 0.0f;
+            }
+        }
+    } else {
+        if (m->forwardVel < 16.0f) {
+            mario_set_forward_vel(m, 16.0f);
+        }
+    }
+    
+    if (-0x4000 <= facingDYaw && facingDYaw <= 0x4000) {
+        m->forwardVel *= -1.0f;
+        bonkAction = sBackwardKnockbackActions[terrainIndex][strengthIndex];
+    } else {
+        m->faceAngle[1] += 0x8000;
+        bonkAction = sForwardKnockbackActions[terrainIndex][strengthIndex];
+    }
+
+    
+    m->invincTimer = 100;
+    drop_and_set_mario_action(m, bonkAction, 1);
+    return 1;
+}
+
 u32 determine_knockback_action(struct MarioState *m, UNUSED s32 arg) {
     u32 bonkAction;
 

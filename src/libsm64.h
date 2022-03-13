@@ -55,6 +55,7 @@ struct SM64MarioState
     
     // Sound info
     uint32_t soundMask;
+    uint8_t attacked;
 };
 
 struct SM64MarioBodyState
@@ -135,7 +136,11 @@ extern SM64_LIB_FN void sm64_mario_tick(
     struct SM64MarioBodyState *outBodyState,
     uint8_t isInput,
     uint8_t giveWingcap,
-    uint8_t isBoosting);
+    uint8_t isBoosting,
+    uint8_t isAttacked,
+    float attackedPosX,
+    float attackedPosY,
+    float attackedPosZ);
 extern SM64_LIB_FN void sm64_mario_delete( int32_t marioId );
 
 extern SM64_LIB_FN uint32_t sm64_surface_object_create( const struct SM64SurfaceObject *surfaceObject );

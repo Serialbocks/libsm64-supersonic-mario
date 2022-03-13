@@ -156,12 +156,12 @@
 #define SOUND_MARIO_OOOF                        0x00080000
 #define SOUND_MARIO_OOOF2                       0x00080000
 #define SOUND_ACTION_TERRAIN_BODY_HIT_GROUND    0x00100000
+#define SOUND_MARIO_ATTACKED                    0x00200000
 
 #define SOUND_MARIO_HRMM            0
 #define SOUND_MARIO_WAH2            0
 #define SOUND_MARIO_WHOA            0
 #define SOUND_MARIO_EEUH            0
-#define SOUND_MARIO_ATTACKED        0
 
 #define SOUND_MARIO_HERE_WE_GO      0
 #define SOUND_MARIO_YAWNING         0
