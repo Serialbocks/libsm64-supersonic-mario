@@ -38,6 +38,11 @@
 #define ACT_FLAG_WATER_OR_TEXT               /* 0x20000000 */ (1 << 29)
 #define ACT_FLAG_THROWING                    /* 0x80000000 */ (1 << 31)
 
+#define ACT_GROUND_POUND_LAND          0x0080023C // (0x03C | ACT_FLAG_STATIONARY | ACT_FLAG_ATTACKING)
+#define ACT_JUMP_KICK                  0x018008AC // (0x0AC | ACT_FLAG_AIR | ACT_FLAG_ATTACKING | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION)
+#define ACT_MOVE_PUNCHING              0x00800457 // (0x057 | ACT_FLAG_MOVING | ACT_FLAG_ATTACKING)
+
+
 struct SM64Surface
 {
     int16_t type;
