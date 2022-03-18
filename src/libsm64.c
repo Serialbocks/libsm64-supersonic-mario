@@ -56,7 +56,7 @@ static void update_button( bool on, u16 button )
 
         gController.buttonDown |= button;
     }
-    else 
+    else
     {
         gController.buttonDown &= ~button;
     }
@@ -99,7 +99,7 @@ SM64_LIB_FN void sm64_global_terminate( void )
     if( !s_init_global ) return;
 
     global_state_bind( NULL );
-    
+
     if( s_init_one_mario )
     {
         for( int i = 0; i < s_mario_instance_pool.size; ++i )
@@ -111,7 +111,7 @@ SM64_LIB_FN void sm64_global_terminate( void )
 
     s_init_global = false;
     s_init_one_mario = false;
-       
+
     alloc_only_pool_free( s_mario_geo_pool );
     surfaces_unload_all();
     unload_mario_anims();
@@ -172,7 +172,7 @@ SM64_LIB_FN int32_t sm64_mario_create( int16_t x, int16_t y, int16_t z )
     return marioIndex;
 }
 
-SM64_LIB_FN void sm64_mario_tick( 
+SM64_LIB_FN void sm64_mario_tick(
     int32_t marioId,
     const struct SM64MarioInputs *inputs,
     struct SM64MarioState *outState,
@@ -180,8 +180,6 @@ SM64_LIB_FN void sm64_mario_tick(
     struct SM64MarioBodyState *outBodyState,
     uint8_t isInput,
     uint8_t giveWingcap,
-    uint8_t isBoosting,
-    uint8_t isAttacked,
     float attackedPosX,
     float attackedPosY,
     float attackedPosZ)
@@ -220,9 +218,10 @@ SM64_LIB_FN void sm64_mario_tick(
         }
         gSoundMask = 0;
 
-        outState->attacked = 0;
-        if(isAttacked) {
-            outState->attacked = mario_knockback_from_position(gMarioState, attackedPosX, attackedPosY, attackedPosZ, 1);
+        gMarioState->isBoosting = outState->userState.isBoosting;
+
+        if(outState->userState.isAttacked) {
+            outState->userState.isAttacked = mario_knockback_from_position(gMarioState, attackedPosX, attackedPosY, attackedPosZ, 1);
         }
     }
     else
@@ -240,10 +239,9 @@ SM64_LIB_FN void sm64_mario_tick(
         gMarioState->marioObj->header.gfx.pos[2] = outBodyState->marioState.posZ;
         gBlinkUpdateCounter = outBodyState->areaUpdateCounter;
     }
-    
 
     apply_mario_platform_displacement();
-    bhv_mario_update(isInput, isBoosting);
+    bhv_mario_update(isInput);
     update_mario_platform();
 
     gfx_adapter_bind_output_buffers( outBuffers );

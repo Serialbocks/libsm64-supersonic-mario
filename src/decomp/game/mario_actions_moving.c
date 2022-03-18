@@ -220,7 +220,7 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
     }
 }
 
-s32 update_sliding(struct MarioState *m, f32 stopSpeed, uint8_t isBoosting) {
+s32 update_sliding(struct MarioState *m, f32 stopSpeed) {
     f32 lossFactor;
     f32 accel;
     f32 oldSpeed;
@@ -269,7 +269,7 @@ s32 update_sliding(struct MarioState *m, f32 stopSpeed, uint8_t isBoosting) {
 
     newSpeed = sqrtf(m->slideVelX * m->slideVelX + m->slideVelZ * m->slideVelZ);
 
-    if(isBoosting) {
+    if(m->isBoosting) {
         newSpeed = oldSpeed - 0.3f;
     }
 
@@ -439,7 +439,7 @@ s32 update_decelerating_speed(struct MarioState *m) {
     return stopped;
 }
 
-void update_walking_speed(struct MarioState *m, uint8_t isBoosting) {
+void update_walking_speed(struct MarioState *m) {
     f32 maxTargetSpeed;
     f32 targetSpeed;
 
@@ -449,7 +449,7 @@ void update_walking_speed(struct MarioState *m, uint8_t isBoosting) {
         maxTargetSpeed = 32.0f;
     }
 
-    if(!isBoosting) {
+    if(!m->isBoosting) {
         targetSpeed = m->intendedMag < maxTargetSpeed ? m->intendedMag : maxTargetSpeed;
     } else {
         targetSpeed = m->intendedMag;
@@ -461,19 +461,19 @@ void update_walking_speed(struct MarioState *m, uint8_t isBoosting) {
 
     if (m->forwardVel <= 0.0f) {
         m->forwardVel += 1.1f;
-    } else if (isBoosting || m->forwardVel <= targetSpeed) {
+    } else if (m->isBoosting || m->forwardVel <= targetSpeed) {
         m->forwardVel += 1.1f - m->forwardVel / 43.0f;
     } else if (m->floor->normal.y >= 0.95f) {
         m->forwardVel -= 1.0f;
     }
 
-    if (isBoosting) {
+    if (m->isBoosting) {
         m->forwardVel += 1.0f;
     }
 
-    if (!isBoosting && m->forwardVel > 48.0f) {
+    if (!m->isBoosting && m->forwardVel > 48.0f) {
         m->forwardVel = 48.0f;
-    } else if(isBoosting && m->forwardVel > MARIO_MAX_BOOSTING_SPEED) {
+    } else if(m->isBoosting && m->forwardVel > MARIO_MAX_BOOSTING_SPEED) {
         m->forwardVel = MARIO_MAX_BOOSTING_SPEED;
     }
 
@@ -796,7 +796,7 @@ void tilt_body_ground_shell(struct MarioState *m, s16 startYaw) {
     marioObj->header.gfx.pos[1] += 45.0f;
 }
 
-s32 act_walking(struct MarioState *m, uint8_t isBoosting) {
+s32 act_walking(struct MarioState *m) {
     Vec3f startPos;
     s16 startYaw = m->faceAngle[1];
 
@@ -833,7 +833,7 @@ s32 act_walking(struct MarioState *m, uint8_t isBoosting) {
     m->actionState = 0;
 
     vec3f_copy(startPos, m->pos);
-    update_walking_speed(m, isBoosting);
+    update_walking_speed(m);
 
     switch (perform_ground_step(m)) {
         case GROUND_STEP_LEFT_GROUND:
@@ -925,7 +925,7 @@ s32 act_hold_walking(struct MarioState *m) {
 
     m->intendedMag *= 0.4f;
 
-    update_walking_speed(m, 0);
+    update_walking_speed(m);
 
     switch (perform_ground_step(m)) {
         case GROUND_STEP_LEFT_GROUND:
@@ -963,7 +963,7 @@ s32 act_hold_heavy_walking(struct MarioState *m) {
 
     m->intendedMag *= 0.1f;
 
-    update_walking_speed(m, 0);
+    update_walking_speed(m);
 
     switch (perform_ground_step(m)) {
         case GROUND_STEP_LEFT_GROUND:
@@ -1032,7 +1032,7 @@ s32 act_turning_around(struct MarioState *m) {
     return FALSE;
 }
 
-s32 act_finish_turning_around(struct MarioState *m, uint8_t isBoosting) {
+s32 act_finish_turning_around(struct MarioState *m) {
     if (m->input & INPUT_ABOVE_SLIDE) {
         return set_mario_action(m, ACT_BEGIN_SLIDING, 0);
     }
@@ -1041,7 +1041,7 @@ s32 act_finish_turning_around(struct MarioState *m, uint8_t isBoosting) {
         return set_jumping_action(m, ACT_SIDE_FLIP, 0);
     }
 
-    update_walking_speed(m, isBoosting);
+    update_walking_speed(m);
     set_mario_animation(m, MARIO_ANIM_TURNING_PART2);
 
     if (perform_ground_step(m) == GROUND_STEP_LEFT_GROUND) {
@@ -1295,7 +1295,7 @@ s32 act_crawling(struct MarioState *m) {
 
     m->intendedMag *= 0.1f;
 
-    update_walking_speed(m, 0);
+    update_walking_speed(m);
 
     switch (perform_ground_step(m)) {
         case GROUND_STEP_LEFT_GROUND:
@@ -1434,7 +1434,7 @@ void common_slide_action(struct MarioState *m, u32 endAction, u32 airAction, s32
 }
 
 s32 common_slide_action_with_jump(struct MarioState *m, u32 stopAction, u32 jumpAction, u32 airAction,
-                                  s32 animation, uint8_t isBoosting) {
+                                  s32 animation) {
     if (m->actionTimer == 5) {
         if (m->input & INPUT_A_PRESSED) {
             return set_jumping_action(m, jumpAction, 0);
@@ -1443,7 +1443,7 @@ s32 common_slide_action_with_jump(struct MarioState *m, u32 stopAction, u32 jump
         m->actionTimer++;
     }
 
-    if (update_sliding(m, 4.0f, isBoosting)) {
+    if (update_sliding(m, 4.0f)) {
         return set_mario_action(m, stopAction, 0);
     }
 
@@ -1451,14 +1451,14 @@ s32 common_slide_action_with_jump(struct MarioState *m, u32 stopAction, u32 jump
     return FALSE;
 }
 
-s32 act_butt_slide(struct MarioState *m, uint8_t isBoosting) {
+s32 act_butt_slide(struct MarioState *m) {
     s32 cancel = common_slide_action_with_jump(m, ACT_BUTT_SLIDE_STOP, ACT_JUMP, ACT_BUTT_SLIDE_AIR,
-                                               MARIO_ANIM_SLIDE, isBoosting);
+                                               MARIO_ANIM_SLIDE);
     tilt_body_butt_slide(m);
     return cancel;
 }
 
-s32 act_hold_butt_slide(struct MarioState *m, uint8_t isBoosting) {
+s32 act_hold_butt_slide(struct MarioState *m) {
     s32 cancel;
 
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) {
@@ -1466,12 +1466,12 @@ s32 act_hold_butt_slide(struct MarioState *m, uint8_t isBoosting) {
     }
 
     cancel = common_slide_action_with_jump(m, ACT_HOLD_BUTT_SLIDE_STOP, ACT_HOLD_JUMP, ACT_HOLD_BUTT_SLIDE_AIR,
-                                           MARIO_ANIM_SLIDING_ON_BOTTOM_WITH_LIGHT_OBJ, isBoosting);
+                                           MARIO_ANIM_SLIDING_ON_BOTTOM_WITH_LIGHT_OBJ);
     tilt_body_butt_slide(m);
     return cancel;
 }
 
-s32 act_crouch_slide(struct MarioState *m, uint8_t isBoosting) {
+s32 act_crouch_slide(struct MarioState *m) {
     s32 cancel;
 
     if (m->input & INPUT_ABOVE_SLIDE) {
@@ -1504,11 +1504,11 @@ s32 act_crouch_slide(struct MarioState *m, uint8_t isBoosting) {
     }
 
     cancel = common_slide_action_with_jump(m, ACT_CROUCHING, ACT_JUMP, ACT_FREEFALL,
-                                           MARIO_ANIM_START_CROUCHING, isBoosting);
+                                           MARIO_ANIM_START_CROUCHING);
     return cancel;
 }
 
-s32 act_slide_kick_slide(struct MarioState *m, uint8_t isBoosting) {
+s32 act_slide_kick_slide(struct MarioState *m) {
     if (m->input & INPUT_A_PRESSED) {
 #ifdef VERSION_SH
         queue_rumble_data(5, 80);
@@ -1521,7 +1521,7 @@ s32 act_slide_kick_slide(struct MarioState *m, uint8_t isBoosting) {
         return set_mario_action(m, ACT_SLIDE_KICK_SLIDE_STOP, 0);
     }
 
-    update_sliding(m, 1.0f, isBoosting);
+    update_sliding(m, 1.0f);
     switch (perform_ground_step(m)) {
         case GROUND_STEP_LEFT_GROUND:
             set_mario_action(m, ACT_FREEFALL, 2);
@@ -1539,7 +1539,7 @@ s32 act_slide_kick_slide(struct MarioState *m, uint8_t isBoosting) {
     return FALSE;
 }
 
-s32 stomach_slide_action(struct MarioState *m, u32 stopAction, u32 airAction, s32 animation, uint8_t isBoosting) {
+s32 stomach_slide_action(struct MarioState *m, u32 stopAction, u32 airAction, s32 animation) {
     if (m->actionTimer == 5) {
         if (!(m->input & INPUT_ABOVE_SLIDE) && (m->input & (INPUT_A_PRESSED | INPUT_B_PRESSED))) {
 #ifdef VERSION_SH
@@ -1552,7 +1552,7 @@ s32 stomach_slide_action(struct MarioState *m, u32 stopAction, u32 airAction, s3
         m->actionTimer++;
     }
 
-    if (update_sliding(m, 4.0f, isBoosting)) {
+    if (update_sliding(m, 4.0f)) {
         return set_mario_action(m, stopAction, 0);
     }
 
@@ -1560,23 +1560,23 @@ s32 stomach_slide_action(struct MarioState *m, u32 stopAction, u32 airAction, s3
     return FALSE;
 }
 
-s32 act_stomach_slide(struct MarioState *m, uint8_t isBoosting) {
-    s32 cancel = stomach_slide_action(m, ACT_STOMACH_SLIDE_STOP, ACT_FREEFALL, MARIO_ANIM_SLIDE_DIVE, isBoosting);
+s32 act_stomach_slide(struct MarioState *m) {
+    s32 cancel = stomach_slide_action(m, ACT_STOMACH_SLIDE_STOP, ACT_FREEFALL, MARIO_ANIM_SLIDE_DIVE);
     return cancel;
 }
 
-s32 act_hold_stomach_slide(struct MarioState *m, uint8_t isBoosting) {
+s32 act_hold_stomach_slide(struct MarioState *m) {
     s32 cancel;
 
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) {
         return drop_and_set_mario_action(m, ACT_STOMACH_SLIDE, 0);
     }
 
-    cancel = stomach_slide_action(m, ACT_DIVE_PICKING_UP, ACT_HOLD_FREEFALL, MARIO_ANIM_SLIDE_DIVE, isBoosting);
+    cancel = stomach_slide_action(m, ACT_DIVE_PICKING_UP, ACT_HOLD_FREEFALL, MARIO_ANIM_SLIDE_DIVE);
     return cancel;
 }
 
-s32 act_dive_slide(struct MarioState *m, uint8_t isBoosting) {
+s32 act_dive_slide(struct MarioState *m) {
     if (!(m->input & INPUT_ABOVE_SLIDE) && (m->input & (INPUT_A_PRESSED | INPUT_B_PRESSED))) {
 #ifdef VERSION_SH
         queue_rumble_data(5, 80);
@@ -1592,7 +1592,7 @@ s32 act_dive_slide(struct MarioState *m, uint8_t isBoosting) {
     // mario_check_object_grab, and so will end up in the regular picking action,
     // rather than the picking up after dive action.
 
-    if (update_sliding(m, 8.0f, isBoosting) && is_anim_at_end(m)) {
+    if (update_sliding(m, 8.0f) && is_anim_at_end(m)) {
         mario_set_forward_vel(m, 0.0f);
         set_mario_action(m, ACT_STOMACH_SLIDE_STOP, 0);
     }
@@ -1994,7 +1994,7 @@ s32 check_common_moving_cancels(struct MarioState *m) {
     return FALSE;
 }
 
-s32 mario_execute_moving_action(struct MarioState *m, uint8_t isBoosting) {
+s32 mario_execute_moving_action(struct MarioState *m) {
     s32 cancel;
 
     if (check_common_moving_cancels(m)) {
@@ -2007,44 +2007,44 @@ s32 mario_execute_moving_action(struct MarioState *m, uint8_t isBoosting) {
 
     /* clang-format off */
     switch (m->action) {
-        case ACT_WALKING:                  cancel = act_walking(m, isBoosting);                         break;
-        case ACT_HOLD_WALKING:             cancel = act_hold_walking(m);                                break;
-        case ACT_HOLD_HEAVY_WALKING:       cancel = act_hold_heavy_walking(m);                          break;
-        case ACT_TURNING_AROUND:           cancel = act_turning_around(m);                              break;
-        case ACT_FINISH_TURNING_AROUND:    cancel = act_finish_turning_around(m, isBoosting);           break;
-        case ACT_BRAKING:                  cancel = act_braking(m);                                     break;
-        case ACT_RIDING_SHELL_GROUND:      cancel = act_riding_shell_ground(m);                         break;
-        case ACT_CRAWLING:                 cancel = act_crawling(m);                                    break;
-        case ACT_BURNING_GROUND:           cancel = act_burning_ground(m);                              break;
-        case ACT_DECELERATING:             cancel = act_decelerating(m);                                break;
-        case ACT_HOLD_DECELERATING:        cancel = act_hold_decelerating(m);                           break;
-        case ACT_BUTT_SLIDE:               cancel = act_butt_slide(m, isBoosting);                      break;
-        case ACT_STOMACH_SLIDE:            cancel = act_stomach_slide(m, isBoosting);                   break;
-        case ACT_HOLD_BUTT_SLIDE:          cancel = act_hold_butt_slide(m, isBoosting);                 break;
-        case ACT_HOLD_STOMACH_SLIDE:       cancel = act_hold_stomach_slide(m, isBoosting);              break;
-        case ACT_DIVE_SLIDE:               cancel = act_dive_slide(m, isBoosting);                      break;
-        case ACT_MOVE_PUNCHING:            cancel = act_move_punching(m);                               break;
-        case ACT_CROUCH_SLIDE:             cancel = act_crouch_slide(m, isBoosting);                    break;
-        case ACT_SLIDE_KICK_SLIDE:         cancel = act_slide_kick_slide(m, isBoosting);                break;
-        case ACT_HARD_BACKWARD_GROUND_KB:  cancel = act_hard_backward_ground_kb(m);                     break;
-        case ACT_HARD_FORWARD_GROUND_KB:   cancel = act_hard_forward_ground_kb(m);                      break;
-        case ACT_BACKWARD_GROUND_KB:       cancel = act_backward_ground_kb(m);                          break;
-        case ACT_FORWARD_GROUND_KB:        cancel = act_forward_ground_kb(m);                           break;
-        case ACT_SOFT_BACKWARD_GROUND_KB:  cancel = act_soft_backward_ground_kb(m);                     break;
-        case ACT_SOFT_FORWARD_GROUND_KB:   cancel = act_soft_forward_ground_kb(m);                      break;
-        case ACT_GROUND_BONK:              cancel = act_ground_bonk(m);                                 break;
-        case ACT_DEATH_EXIT_LAND:          cancel = act_death_exit_land(m);                             break;
-        case ACT_JUMP_LAND:                cancel = act_jump_land(m);                                   break;
-        case ACT_FREEFALL_LAND:            cancel = act_freefall_land(m);                               break;
-        case ACT_DOUBLE_JUMP_LAND:         cancel = act_double_jump_land(m);                            break;
-        case ACT_SIDE_FLIP_LAND:           cancel = act_side_flip_land(m);                              break;
-        case ACT_HOLD_JUMP_LAND:           cancel = act_hold_jump_land(m);                              break;
-        case ACT_HOLD_FREEFALL_LAND:       cancel = act_hold_freefall_land(m);                          break;
-        case ACT_TRIPLE_JUMP_LAND:         cancel = act_triple_jump_land(m);                            break;
-        case ACT_BACKFLIP_LAND:            cancel = act_backflip_land(m);                               break;
-        case ACT_QUICKSAND_JUMP_LAND:      cancel = act_quicksand_jump_land(m);                         break;
-        case ACT_HOLD_QUICKSAND_JUMP_LAND: cancel = act_hold_quicksand_jump_land(m);                    break;
-        case ACT_LONG_JUMP_LAND:           cancel = act_long_jump_land(m);                              break;
+        case ACT_WALKING:                  cancel = act_walking(m);                         break;
+        case ACT_HOLD_WALKING:             cancel = act_hold_walking(m);                    break;
+        case ACT_HOLD_HEAVY_WALKING:       cancel = act_hold_heavy_walking(m);              break;
+        case ACT_TURNING_AROUND:           cancel = act_turning_around(m);                  break;
+        case ACT_FINISH_TURNING_AROUND:    cancel = act_finish_turning_around(m);           break;
+        case ACT_BRAKING:                  cancel = act_braking(m);                         break;
+        case ACT_RIDING_SHELL_GROUND:      cancel = act_riding_shell_ground(m);             break;
+        case ACT_CRAWLING:                 cancel = act_crawling(m);                        break;
+        case ACT_BURNING_GROUND:           cancel = act_burning_ground(m);                  break;
+        case ACT_DECELERATING:             cancel = act_decelerating(m);                    break;
+        case ACT_HOLD_DECELERATING:        cancel = act_hold_decelerating(m);               break;
+        case ACT_BUTT_SLIDE:               cancel = act_butt_slide(m);                      break;
+        case ACT_STOMACH_SLIDE:            cancel = act_stomach_slide(m);                   break;
+        case ACT_HOLD_BUTT_SLIDE:          cancel = act_hold_butt_slide(m);                 break;
+        case ACT_HOLD_STOMACH_SLIDE:       cancel = act_hold_stomach_slide(m);              break;
+        case ACT_DIVE_SLIDE:               cancel = act_dive_slide(m);                      break;
+        case ACT_MOVE_PUNCHING:            cancel = act_move_punching(m);                   break;
+        case ACT_CROUCH_SLIDE:             cancel = act_crouch_slide(m);                    break;
+        case ACT_SLIDE_KICK_SLIDE:         cancel = act_slide_kick_slide(m);                break;
+        case ACT_HARD_BACKWARD_GROUND_KB:  cancel = act_hard_backward_ground_kb(m);         break;
+        case ACT_HARD_FORWARD_GROUND_KB:   cancel = act_hard_forward_ground_kb(m);          break;
+        case ACT_BACKWARD_GROUND_KB:       cancel = act_backward_ground_kb(m);              break;
+        case ACT_FORWARD_GROUND_KB:        cancel = act_forward_ground_kb(m);               break;
+        case ACT_SOFT_BACKWARD_GROUND_KB:  cancel = act_soft_backward_ground_kb(m);         break;
+        case ACT_SOFT_FORWARD_GROUND_KB:   cancel = act_soft_forward_ground_kb(m);          break;
+        case ACT_GROUND_BONK:              cancel = act_ground_bonk(m);                     break;
+        case ACT_DEATH_EXIT_LAND:          cancel = act_death_exit_land(m);                 break;
+        case ACT_JUMP_LAND:                cancel = act_jump_land(m);                       break;
+        case ACT_FREEFALL_LAND:            cancel = act_freefall_land(m);                   break;
+        case ACT_DOUBLE_JUMP_LAND:         cancel = act_double_jump_land(m);                break;
+        case ACT_SIDE_FLIP_LAND:           cancel = act_side_flip_land(m);                  break;
+        case ACT_HOLD_JUMP_LAND:           cancel = act_hold_jump_land(m);                  break;
+        case ACT_HOLD_FREEFALL_LAND:       cancel = act_hold_freefall_land(m);              break;
+        case ACT_TRIPLE_JUMP_LAND:         cancel = act_triple_jump_land(m);                break;
+        case ACT_BACKFLIP_LAND:            cancel = act_backflip_land(m);                   break;
+        case ACT_QUICKSAND_JUMP_LAND:      cancel = act_quicksand_jump_land(m);             break;
+        case ACT_HOLD_QUICKSAND_JUMP_LAND: cancel = act_hold_quicksand_jump_land(m);        break;
+        case ACT_LONG_JUMP_LAND:           cancel = act_long_jump_land(m);                  break;
     }
     /* clang-format on */
 

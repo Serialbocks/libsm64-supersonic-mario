@@ -69,7 +69,7 @@ enum SpTaskState {
 //     /*0x44*/ OSMesg msg;
 //     /*0x48*/ enum SpTaskState state;
 // }; // size = 0x4C, align = 0x8
-// 
+//
 // struct VblankHandler
 // {
 //     OSMesgQueue *queue;
@@ -257,7 +257,7 @@ struct Surface
     } normal;
     f32 originOffset;
     //struct Object *object;
-    
+
     u8 isValid; // libsm64: added field
     struct SurfaceObjectTransform *transform; // libsm64: added field
     u16 terrain; // libsm64: added field
@@ -364,6 +364,9 @@ struct MarioState
     /*0xC4*/ f32 unkC4;
 
     u16 curTerrain; // libsm64: added field
+
+    // libsm64 user fields
+    u8 isBoosting;
 };
 
 #endif // TYPES_H

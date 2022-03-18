@@ -53,6 +53,12 @@ struct SM64Surface
     int16_t vertices[3][3];
 };
 
+struct SM64MarioUserState
+{
+    uint8_t isAttacked;
+    uint8_t isBoosting;
+};
+
 struct SM64MarioState
 {
     float posX, posY, posZ;
@@ -62,7 +68,8 @@ struct SM64MarioState
 
     // Sound info
     uint32_t soundMask;
-    uint8_t attacked;
+
+    struct SM64MarioUserState userState;
 };
 
 struct SM64MarioBodyState
@@ -143,8 +150,6 @@ extern SM64_LIB_FN void sm64_mario_tick(
     struct SM64MarioBodyState *outBodyState,
     uint8_t isInput,
     uint8_t giveWingcap,
-    uint8_t isBoosting,
-    uint8_t isAttacked,
     float attackedPosX,
     float attackedPosY,
     float attackedPosZ);

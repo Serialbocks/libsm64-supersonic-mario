@@ -1709,7 +1709,7 @@ void func_sh_8025574C(void) {
 /**
  * Main function for executing Mario's behavior.
  */
-s32 execute_mario_action(UNUSED struct Object *o, uint8_t isInput, uint8_t isBoosting) {
+s32 execute_mario_action(UNUSED struct Object *o, uint8_t isInput) {
     s32 inLoop = TRUE;
 
     if (gMarioState->action) {
@@ -1735,11 +1735,11 @@ s32 execute_mario_action(UNUSED struct Object *o, uint8_t isInput, uint8_t isBoo
                     break;
 
                 case ACT_GROUP_MOVING:
-                    inLoop = mario_execute_moving_action(gMarioState, isBoosting);
+                    inLoop = mario_execute_moving_action(gMarioState);
                     break;
 
                 case ACT_GROUP_AIRBORNE:
-                    inLoop = mario_execute_airborne_action(gMarioState, isBoosting);
+                    inLoop = mario_execute_airborne_action(gMarioState);
                     break;
 
                 case ACT_GROUP_SUBMERGED:

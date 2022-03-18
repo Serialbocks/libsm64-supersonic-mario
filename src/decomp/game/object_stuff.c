@@ -90,7 +90,7 @@ static struct Object *allocate_object(void) {
     obj->bhvDelayTimer = 0;
 
     obj->hitboxRadius = 37.0f;    // Override directly for Mario
-    obj->hitboxHeight = 160.0f;   // 
+    obj->hitboxHeight = 160.0f;   //
     obj->hurtboxRadius = 0.0f;
     obj->hurtboxHeight = 0.0f;
     obj->hitboxDownOffset = 0.0f;
@@ -202,14 +202,14 @@ struct Object *hack_allocate_mario(void)
 /**
  * Mario's primary behavior update function.
  */
-void bhv_mario_update(uint8_t isInput, uint8_t isBoosting) {
+void bhv_mario_update(uint8_t isInput) {
     u32 particleFlags = 0;
 //  s32 i;
 
 	gCurrentObject = gMarioObject;
     if (isInput)
     {
-        particleFlags = execute_mario_action(gCurrentObject, isInput, isBoosting);
+        particleFlags = execute_mario_action(gCurrentObject, isInput);
     }
     gCurrentObject->oMarioParticleFlags = particleFlags;
 
