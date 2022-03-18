@@ -27,14 +27,14 @@ def main():
     dumpbinPath = '\"' + vsToolsBasePath + 'dumpbin\"'
     libCommandPath = '\"' + vsToolsBasePath + 'lib.exe\"'
 
-    bakkesmodLibDir = 'C:\\Users\\John\\AppData\\Roaming\\bakkesmod\\bakkesmod\libs\\'
+    bakkesmodLibDir = os.getenv('APPDATA') + '\\bakkesmod\\bakkesmod\libs\\'
     bakkesmodDllPath = bakkesmodLibDir + 'sm64.dll'
     bakkesmodLibPath = bakkesmodLibDir + 'sm64.lib'
 
     if not exists(dllPath):
         print('{} not found'.format(dllPath))
         return
-    
+
     print('generating exports file...')
     os.system('{} /EXPORTS {} > {}'.format(dumpbinPath, dllPath, exportsPath))
 
@@ -46,7 +46,7 @@ def main():
     while i < 14:
         exportsLines.pop(0)
         i = i + 1
-    
+
     numFunctions = int(exportsLines[0].strip().split(' ')[0])
     i = 0
     while i < 4:
