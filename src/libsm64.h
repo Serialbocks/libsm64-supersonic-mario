@@ -41,6 +41,8 @@
 #define ACT_GROUND_POUND_LAND          0x0080023C // (0x03C | ACT_FLAG_STATIONARY | ACT_FLAG_ATTACKING)
 #define ACT_JUMP_KICK                  0x018008AC // (0x0AC | ACT_FLAG_AIR | ACT_FLAG_ATTACKING | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION)
 #define ACT_MOVE_PUNCHING              0x00800457 // (0x057 | ACT_FLAG_MOVING | ACT_FLAG_ATTACKING)
+#define ACT_DIVE                       0x0188088A // (0x08A | ACT_FLAG_AIR | ACT_FLAG_DIVING | ACT_FLAG_ATTACKING | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION)
+#define ACT_DIVE_SLIDE                 0x00880456 // (0x056 | ACT_FLAG_MOVING | ACT_FLAG_DIVING | ACT_FLAG_ATTACKING)
 
 
 struct SM64Surface
@@ -57,7 +59,7 @@ struct SM64MarioState
     float velX, velY, velZ;
     float faceAngle;
     int16_t health;
-    
+
     // Sound info
     uint32_t soundMask;
     uint8_t attacked;
@@ -133,7 +135,7 @@ extern SM64_LIB_FN void sm64_global_terminate( void );
 extern SM64_LIB_FN void sm64_static_surfaces_load( const struct SM64Surface *surfaceArray, uint32_t numSurfaces );
 
 extern SM64_LIB_FN int32_t sm64_mario_create( int16_t x, int16_t y, int16_t z );
-extern SM64_LIB_FN void sm64_mario_tick( 
+extern SM64_LIB_FN void sm64_mario_tick(
     int32_t marioId,
     const struct SM64MarioInputs *inputs,
     struct SM64MarioState *outState,
