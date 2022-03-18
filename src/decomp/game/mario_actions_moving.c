@@ -1,6 +1,7 @@
 #include <math.h>
 
 #include "../include/PR/ultratypes.h"
+#include "../include/PR/os_cont.h"
 #include "../shim.h"
 
 #include "../include/sm64.h"
@@ -1873,6 +1874,11 @@ s32 act_long_jump_land(struct MarioState *m) {
         m->forwardVel = 0.0f;
     }
 #endif
+
+    if ((m->bljState == 2) && m->forwardVel < 1.0f && (m->controller->buttonDown & A_BUTTON)) {
+        set_jumping_action(m, ACT_LONG_JUMP, 0);
+        return FALSE;
+    }
 
     if (!(m->input & INPUT_Z_DOWN)) {
         m->input &= ~INPUT_A_PRESSED;

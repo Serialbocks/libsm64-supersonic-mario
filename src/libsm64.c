@@ -219,6 +219,8 @@ SM64_LIB_FN void sm64_mario_tick(
         gSoundMask = 0;
 
         gMarioState->isBoosting = outState->userState.isBoosting;
+        gMarioState->bljState = outState->userState.bljConfig.bljState;
+        gMarioState->bljVel = outState->userState.bljConfig.bljVel;
 
         if(outState->userState.isAttacked) {
             outState->userState.isAttacked = mario_knockback_from_position(gMarioState, attackedPosX, attackedPosY, attackedPosZ, 1);

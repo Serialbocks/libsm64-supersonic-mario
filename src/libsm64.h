@@ -53,10 +53,24 @@ struct SM64Surface
     int16_t vertices[3][3];
 };
 
+typedef enum
+{
+    SM64_BLJ_STATE_DISABLED,
+    SM64_BLJ_STATE_PRESS,
+    SM64_BLJ_STATE_HOLD
+} SM64BljState;
+
+struct SM64MarioBljConfig
+{
+    SM64BljState bljState;
+    uint8_t bljVel;
+};
+
 struct SM64MarioUserState
 {
     uint8_t isAttacked;
     uint8_t isBoosting;
+    struct SM64MarioBljConfig bljConfig;
 };
 
 struct SM64MarioState

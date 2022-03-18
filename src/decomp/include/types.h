@@ -367,6 +367,8 @@ struct MarioState
 
     // libsm64 user fields
     u8 isBoosting;
+    u8 bljState; // 0: Off, 1: Press, 2: Hold
+    u8 bljVel;
 };
 
 #endif // TYPES_H

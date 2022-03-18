@@ -1,6 +1,7 @@
 #include <math.h>
 
 #include "../include/PR/ultratypes.h"
+#include "../include/PR/os_cont.h"
 #include "../shim.h"
 
 #include "../include/sm64.h"
@@ -392,6 +393,18 @@ u32 common_air_action_step(struct MarioState *m, u32 landAction, s32 animation, 
     stepResult = perform_air_step(m, stepArg);
     switch (stepResult) {
         case AIR_STEP_NONE:
+            if (m->bljState != 0 && m->action == ACT_LONG_JUMP && m->forwardVel < 1.0f && m->pos[1] - 50.0f < m->floorHeight) {
+                if (m->bljState == 1) {
+                    if (m->controller->buttonPressed & A_BUTTON) {
+                        m->forwardVel -= m->bljVel * 2.5f;
+                        m->vel[1] = -50.0f;
+                    }
+                } else // (m->bljState == 2)
+                if (m->controller->buttonDown & A_BUTTON) {
+                    m->forwardVel -= m->bljVel * 2.5f;
+                    m->vel[1] = -50.0f;
+                }
+            }
             set_mario_animation(m, animation);
             break;
 
