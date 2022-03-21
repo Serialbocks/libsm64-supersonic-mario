@@ -53,6 +53,15 @@ struct SM64Surface
     int16_t vertices[3][3];
 };
 
+struct SM64MarioAttackState
+{
+    uint8_t isAttacked;
+    // Attack Vector
+    float attackedPosX;
+    float attackedPosY;
+    float attackedPosZ;
+};
+
 typedef enum
 {
     SM64_BLJ_STATE_DISABLED,
@@ -68,9 +77,9 @@ struct SM64MarioBljConfig
 
 struct SM64MarioUserState
 {
-    uint8_t isAttacked;
-    uint8_t isBoosting;
+    struct SM64MarioAttackState attackState;
     struct SM64MarioBljConfig bljConfig;
+    uint8_t isBoosting;
 };
 
 struct SM64MarioState
@@ -163,10 +172,7 @@ extern SM64_LIB_FN void sm64_mario_tick(
     struct SM64MarioGeometryBuffers *outBuffers,
     struct SM64MarioBodyState *outBodyState,
     uint8_t isInput,
-    uint8_t giveWingcap,
-    float attackedPosX,
-    float attackedPosY,
-    float attackedPosZ);
+    uint8_t giveWingcap);
 extern SM64_LIB_FN void sm64_mario_delete( int32_t marioId );
 
 extern SM64_LIB_FN uint32_t sm64_surface_object_create( const struct SM64SurfaceObject *surfaceObject );

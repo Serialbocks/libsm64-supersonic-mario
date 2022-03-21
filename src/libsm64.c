@@ -179,10 +179,7 @@ SM64_LIB_FN void sm64_mario_tick(
     struct SM64MarioGeometryBuffers *outBuffers,
     struct SM64MarioBodyState *outBodyState,
     uint8_t isInput,
-    uint8_t giveWingcap,
-    float attackedPosX,
-    float attackedPosY,
-    float attackedPosZ)
+    uint8_t giveWingcap)
 {
     if( marioId >= s_mario_instance_pool.size || s_mario_instance_pool.objects[marioId] == NULL )
     {
@@ -222,8 +219,12 @@ SM64_LIB_FN void sm64_mario_tick(
         gMarioState->bljState = outState->userState.bljConfig.bljState;
         gMarioState->bljVel = outState->userState.bljConfig.bljVel;
 
-        if(outState->userState.isAttacked) {
-            outState->userState.isAttacked = mario_knockback_from_position(gMarioState, attackedPosX, attackedPosY, attackedPosZ, 1);
+        if(outState->userState.attackState.isAttacked) {
+            outState->userState.attackState.isAttacked = mario_knockback_from_position(gMarioState,
+                                                            outState->userState.attackState.attackedPosX,
+                                                            outState->userState.attackState.attackedPosY,
+                                                            outState->userState.attackState.attackedPosZ,
+                                                            1);
         }
     }
     else
