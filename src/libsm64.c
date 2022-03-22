@@ -174,7 +174,7 @@ SM64_LIB_FN int32_t sm64_mario_create( int16_t x, int16_t y, int16_t z )
 
 SM64_LIB_FN void sm64_mario_tick(
     int32_t marioId,
-    const struct SM64MarioInputs *inputs,
+    struct SM64MarioInputs *inputs,
     struct SM64MarioState *outState,
     struct SM64MarioGeometryBuffers *outBuffers,
     struct SM64MarioBodyState *outBodyState,
@@ -215,15 +215,15 @@ SM64_LIB_FN void sm64_mario_tick(
         }
         gSoundMask = 0;
 
-        gMarioState->isBoosting = outState->userState.isBoosting;
-        gMarioState->bljState = outState->userState.bljConfig.bljState;
-        gMarioState->bljVel = outState->userState.bljConfig.bljVel;
+        gMarioState->isBoosting = inputs->isBoosting;
+        gMarioState->bljState = inputs->bljInput.bljState;
+        gMarioState->bljVel = inputs->bljInput.bljVel;
 
-        if(outState->userState.attackState.isAttacked) {
-            outState->userState.attackState.isAttacked = mario_knockback_from_position(gMarioState,
-                                                            outState->userState.attackState.attackedPosX,
-                                                            outState->userState.attackState.attackedPosY,
-                                                            outState->userState.attackState.attackedPosZ,
+        if(inputs->attackInput.isAttacked) {
+            inputs->attackInput.isAttacked = mario_knockback_from_position(gMarioState,
+                                                            inputs->attackInput.attackedPosX,
+                                                            inputs->attackInput.attackedPosY,
+                                                            inputs->attackInput.attackedPosZ,
                                                             1);
         }
     }

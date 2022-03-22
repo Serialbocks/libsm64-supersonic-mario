@@ -53,35 +53,6 @@ struct SM64Surface
     int16_t vertices[3][3];
 };
 
-struct SM64MarioAttackState
-{
-    uint8_t isAttacked;
-    // Attack Vector
-    float attackedPosX;
-    float attackedPosY;
-    float attackedPosZ;
-};
-
-typedef enum
-{
-    SM64_BLJ_STATE_DISABLED,
-    SM64_BLJ_STATE_PRESS,
-    SM64_BLJ_STATE_HOLD
-} SM64BljState;
-
-struct SM64MarioBljConfig
-{
-    SM64BljState bljState;
-    uint8_t bljVel;
-};
-
-struct SM64MarioUserState
-{
-    struct SM64MarioAttackState attackState;
-    struct SM64MarioBljConfig bljConfig;
-    uint8_t isBoosting;
-};
-
 struct SM64MarioState
 {
     float posX, posY, posZ;
@@ -91,8 +62,6 @@ struct SM64MarioState
 
     // Sound info
     uint32_t soundMask;
-
-    struct SM64MarioUserState userState;
 };
 
 struct SM64MarioBodyState
@@ -121,11 +90,38 @@ struct SM64MarioBodyState
     struct SM64MarioState marioState;
 };
 
+struct SM64MarioAttackInput
+{
+    uint8_t isAttacked;
+    // Attack Vector
+    float attackedPosX;
+    float attackedPosY;
+    float attackedPosZ;
+};
+
+typedef enum
+{
+    SM64_BLJ_STATE_DISABLED,
+    SM64_BLJ_STATE_PRESS,
+    SM64_BLJ_STATE_HOLD
+} SM64BljState;
+
+struct SM64MarioBljInput
+{
+    SM64BljState bljState;
+    uint8_t bljVel;
+};
+
 struct SM64MarioInputs
 {
     float camLookX, camLookZ;
     float stickX, stickY;
     uint8_t buttonA, buttonB, buttonZ;
+
+    // Custom user inputs
+    struct SM64MarioAttackInput attackInput;
+    struct SM64MarioBljInput bljInput;
+    uint8_t isBoosting;
 };
 
 struct SM64ObjectTransform
@@ -167,7 +163,7 @@ extern SM64_LIB_FN void sm64_static_surfaces_load( const struct SM64Surface *sur
 extern SM64_LIB_FN int32_t sm64_mario_create( int16_t x, int16_t y, int16_t z );
 extern SM64_LIB_FN void sm64_mario_tick(
     int32_t marioId,
-    const struct SM64MarioInputs *inputs,
+    struct SM64MarioInputs *inputs,
     struct SM64MarioState *outState,
     struct SM64MarioGeometryBuffers *outBuffers,
     struct SM64MarioBodyState *outBodyState,
