@@ -62,6 +62,8 @@ struct SM64MarioState
 
     // Sound info
     uint32_t soundMask;
+    // Whether mario was attacked and took damage
+    uint8_t isAttacked;
 };
 
 struct SM64MarioBodyState

@@ -225,6 +225,9 @@ SM64_LIB_FN void sm64_mario_tick(
                                                             inputs->attackInput.attackedPosY,
                                                             inputs->attackInput.attackedPosZ,
                                                             1);
+            outState->isAttacked = inputs->attackInput.isAttacked;
+        } else {
+            outState->isAttacked = 0;
         }
     }
     else
