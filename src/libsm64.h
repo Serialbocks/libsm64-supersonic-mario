@@ -85,11 +85,12 @@ struct SM64MarioBodyState
     int16_t animFrame;
     uint32_t animIndex;
     int16_t animYTrans;
+    uint16_t animTimer;
+    int32_t animFrameAccelAssist;
+    int32_t animAccel;
 
     int16_t gfxFaceAngle;
     uint16_t areaUpdateCounter;
-
-    uint32_t flags;
 
     struct SM64MarioState marioState;
 };
