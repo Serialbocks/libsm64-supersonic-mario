@@ -233,20 +233,17 @@ SM64_LIB_FN void sm64_mario_tick(
     else
     {
         memcpy(bodyState, outBodyState, sizeof(struct MarioBodyState));
-        gMarioState->marioObj->header.gfx.animInfo.animID = -1;
         load_mario_animation(gMarioState->animation, outBodyState->animIndex);
         struct Animation* targetAnim = gMarioState->animation->targetAnim;
         gMarioState->marioObj->header.gfx.animInfo.animFrame = outBodyState->animFrame;
         gMarioState->marioObj->header.gfx.animInfo.curAnim = targetAnim;
         gMarioState->marioObj->header.gfx.animInfo.animID = outBodyState->animIndex;
         gMarioState->marioObj->header.gfx.animInfo.animYTrans = outBodyState->animYTrans;
-        gMarioState->marioObj->header.gfx.animInfo.animFrameAccelAssist = outBodyState->animFrameAccelAssist;
-        gMarioState->marioObj->header.gfx.animInfo.animAccel = outBodyState->animAccel;
-        gMarioState->marioObj->header.gfx.animInfo.animTimer = outBodyState->animTimer;
         gMarioState->marioObj->header.gfx.angle[1] = outBodyState->gfxFaceAngle;
         gMarioState->marioObj->header.gfx.pos[0] = outBodyState->marioState.posX;
         gMarioState->marioObj->header.gfx.pos[1] = outBodyState->marioState.posY;
         gMarioState->marioObj->header.gfx.pos[2] = outBodyState->marioState.posZ;
+        gMarioState->flags = outBodyState->flags;
         gBlinkUpdateCounter = outBodyState->areaUpdateCounter;
     }
 
@@ -264,11 +261,9 @@ SM64_LIB_FN void sm64_mario_tick(
         outBodyState->animFrame = gMarioState->marioObj->header.gfx.animInfo.animFrame;
         outBodyState->animYTrans = gMarioState->marioObj->header.gfx.animInfo.animYTrans;
         outBodyState->animIndex = current_anim_index();
-        outBodyState->animFrameAccelAssist = gMarioState->marioObj->header.gfx.animInfo.animFrameAccelAssist;
-        outBodyState->animAccel = gMarioState->marioObj->header.gfx.animInfo.animAccel;
-        outBodyState->animTimer = gMarioState->marioObj->header.gfx.animInfo.animTimer;
         outBodyState->gfxFaceAngle = gMarioState->marioObj->header.gfx.angle[1];
         outBodyState->areaUpdateCounter = gAreaUpdateCounter;
+        outBodyState->flags = gMarioState->flags;
 
         gAreaUpdateCounter++;
         gBlinkUpdateCounter = gAreaUpdateCounter;
