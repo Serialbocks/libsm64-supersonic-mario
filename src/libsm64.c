@@ -259,7 +259,7 @@ SM64_LIB_FN void sm64_mario_tick(
         memcpy( outBodyState, bodyState, sizeof( struct MarioBodyState ));
         outBodyState->animFrame = gMarioState->marioObj->header.gfx.animInfo.animFrame;
         outBodyState->animYTrans = gMarioState->marioObj->header.gfx.animInfo.animYTrans;
-        outBodyState->animIndex = current_anim_index();
+        outBodyState->animIndex = gMarioState->marioObj->header.gfx.animInfo.animID;
         outBodyState->gfxFaceAngle = gMarioState->marioObj->header.gfx.angle[1];
         outBodyState->areaUpdateCounter = gAreaUpdateCounter;
 
