@@ -243,7 +243,6 @@ SM64_LIB_FN void sm64_mario_tick(
         gMarioState->marioObj->header.gfx.pos[0] = outBodyState->marioState.posX;
         gMarioState->marioObj->header.gfx.pos[1] = outBodyState->marioState.posY;
         gMarioState->marioObj->header.gfx.pos[2] = outBodyState->marioState.posZ;
-        gMarioState->flags = outBodyState->flags;
         gBlinkUpdateCounter = outBodyState->areaUpdateCounter;
     }
 
@@ -263,7 +262,6 @@ SM64_LIB_FN void sm64_mario_tick(
         outBodyState->animIndex = current_anim_index();
         outBodyState->gfxFaceAngle = gMarioState->marioObj->header.gfx.angle[1];
         outBodyState->areaUpdateCounter = gAreaUpdateCounter;
-        outBodyState->flags = gMarioState->flags;
 
         gAreaUpdateCounter++;
         gBlinkUpdateCounter = gAreaUpdateCounter;
