@@ -89,6 +89,8 @@ struct SM64MarioBodyState
     int16_t gfxFaceAngle;
     uint16_t areaUpdateCounter;
 
+    uint32_t flags;
+
     struct SM64MarioState marioState;
 };
 
