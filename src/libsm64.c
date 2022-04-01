@@ -252,7 +252,8 @@ SM64_LIB_FN void sm64_mario_tick(
 
     gfx_adapter_bind_output_buffers( outBuffers );
 
-    geo_process_root_hack_single_node( s_mario_graph_node );
+    if(isInput || gMarioState->marioObj->header.gfx.animInfo.animID >= 0)
+        geo_process_root_hack_single_node( s_mario_graph_node );
 
     if(isInput)
     {
