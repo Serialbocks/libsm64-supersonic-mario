@@ -80,7 +80,10 @@ static void free_area( struct Area *area )
     free( area );
 }
 
-SM64_LIB_FN void sm64_global_init( uint8_t *rom, uint8_t *outTexture, SM64DebugPrintFunctionPtr debugPrintFunction )
+SM64_LIB_FN void sm64_global_init( uint8_t *rom,
+    uint8_t *outTexture,
+    uint8_t *altTexture,
+    SM64DebugPrintFunctionPtr debugPrintFunction )
 {
     if( s_init_global )
         sm64_global_terminate();
@@ -88,7 +91,8 @@ SM64_LIB_FN void sm64_global_init( uint8_t *rom, uint8_t *outTexture, SM64DebugP
     s_init_global = true;
     g_debug_print_func = debugPrintFunction;
 
-    load_mario_textures_from_rom( rom, outTexture );
+    load_mario_textures_from_rom( rom, outTexture, false );
+    load_mario_textures_from_rom( rom, altTexture, true );
     load_mario_anims_from_rom( rom );
 
     memory_init();

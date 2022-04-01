@@ -157,7 +157,10 @@ enum
     SM64_GEO_MAX_TRIANGLES = 1024,
 };
 
-extern SM64_LIB_FN void sm64_global_init( uint8_t *rom, uint8_t *outTexture, SM64DebugPrintFunctionPtr debugPrintFunction );
+extern SM64_LIB_FN void sm64_global_init( uint8_t *rom,
+    uint8_t *outTexture,
+    uint8_t *altTexture,
+    SM64DebugPrintFunctionPtr debugPrintFunction );
 extern SM64_LIB_FN void sm64_global_terminate( void );
 
 extern SM64_LIB_FN void sm64_static_surfaces_load( const struct SM64Surface *surfaceArray, uint32_t numSurfaces );
