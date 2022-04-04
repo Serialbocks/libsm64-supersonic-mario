@@ -116,6 +116,7 @@ SM64_LIB_FN void sm64_global_terminate( void )
     s_init_global = false;
     s_init_one_mario = false;
 
+    if(s_mario_geo_pool != NULL)
     alloc_only_pool_free( s_mario_geo_pool );
     surfaces_unload_all();
     unload_mario_anims();
