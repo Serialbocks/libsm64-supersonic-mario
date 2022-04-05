@@ -1,17 +1,6 @@
-# libsm64 - Super Mario 64 as a library
+# libsm64-supersonic-mario - Super Mario 64 as a library, for Suprsonic Mario Rocket League Mod
 
-The purpose of this project is to provide a clean interface to the movement and rendering
-code which was reversed from SM64 by the [SM64 decompilation project](https://github.com/n64decomp/sm64),
-so that Mario can be dropped in to existing game engines or other systems with minimal effort.
-This project produces a shared library file containing mostly code from the decompilation project,
-and loads an official SM64 ROM at runtime to get Mario's texture and animation data, so any project
-which makes use of this library must ask the user to provide a ROM for asset extraction.
-
-## Bindings and plugins
-
-- [Rust bindings](https://github.com/nickmass/libsm64-rust)
-- [Unity plugin](https://github.com/libsm64/libsm64-unity)
-- [Blender add-on](https://github.com/libsm64/libsm64-blender)
+This repo is a fork of [libsm64](https://github.com/libsm64/libsm64) used for the Supersonic Mario Rocket League mod. Changes include supporting rendering a mario received from over the network, exposing audio flags, BLJ anywhere, and other miscellaneous changes.
 
 ## Building on Linux
 
