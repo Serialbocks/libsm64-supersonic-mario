@@ -183,6 +183,14 @@ extern SM64_LIB_FN void sm64_surface_object_move( uint32_t objectId, const struc
 extern SM64_LIB_FN void sm64_surface_object_delete( uint32_t objectId );
 
 extern SM64_LIB_FN void sm64_create_next_audio_buffer( int16_t *samples, uint32_t num_samples );
-extern SM64_LIB_FN void sm64_load_sound_data_from_rom( void *SoundDataADSR, void *SoundDataRaw, void *MusicData, void *BankSetsData );
+extern SM64_LIB_FN void sm64_load_sound_data( uint8_t *bank_sets,
+    uint8_t *sequences_bin,
+    uint8_t *sound_data_ctl,
+    uint8_t *sound_data_tbl,
+    int bank_set_len,
+    int sequences_len,
+    int ctl_len,
+    int tbl_len );
+extern SM64_LIB_FN void sm64_mario_set_camera_to_object(float x, float y, float z);
 
 #endif//LIB_SM64_H
