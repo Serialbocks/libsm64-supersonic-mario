@@ -1,7 +1,7 @@
 default: lib
 
 CC      := cc
-CFLAGS  := -g -Wall -fPIC -DSM64_LIB_EXPORT -DVERSION_US
+CFLAGS  := -g -Wall -fPIC -DSM64_LIB_EXPORT -DVERSION_US -DNO_SEGMENTED_MEMORY -DUSE_SYSTEM_MALLOC -DGBI_FLOATS
 LDFLAGS := -lm -shared
 
 SRC_DIRS  := src src/decomp src/decomp/audio src/decomp/engine src/decomp/game src/decomp/mario src/decomp/pc src/decomp/tools 

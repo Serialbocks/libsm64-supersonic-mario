@@ -4,7 +4,7 @@
 // This file contains various data types used in Super Mario 64 that don't yet
 // have an appropriate header.
 
-// #include <ultra64.h>
+#include "ultra64.h"
 #include "macros.h"
 #include "PR/ultratypes.h"
 

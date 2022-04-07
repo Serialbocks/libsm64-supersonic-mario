@@ -31,6 +31,7 @@
 #include "gfx_adapter.h"
 #include "load_anim_data.h"
 #include "load_tex_data.h"
+#include "load_sound_data.h"
 #include "obj_pool.h"
 
 static struct AllocOnlyPool *s_mario_geo_pool = NULL;
@@ -96,6 +97,7 @@ SM64_LIB_FN void sm64_global_init( uint8_t *rom,
     load_mario_anims_from_rom( rom );
 
     memory_init();
+    //load_sound_data_from_rom(rom);
 }
 
 SM64_LIB_FN void sm64_global_terminate( void )
@@ -325,4 +327,21 @@ SM64_LIB_FN void sm64_surface_object_delete( uint32_t objectId )
     }
 
     surfaces_unload_object( objectId );
+}
+
+SM64_LIB_FN void sm64_create_next_audio_buffer( int16_t *samples, uint32_t num_samples )
+{
+    create_next_audio_buffer( samples, num_samples );
+}
+
+void sm64_load_sound_data_from_rom( void *SoundDataADSR, void *SoundDataRaw, void *MusicData, void *BankSetsData )
+{
+    gSoundDataADSR = SoundDataADSR;
+    gSoundDataRaw = SoundDataRaw;
+    gMusicData = MusicData;
+    gBankSetsData = BankSetsData;
+
+    audio_init();
+    sound_init();
+    sound_reset(0);
 }

@@ -44,6 +44,8 @@
 #define ACT_DIVE                       0x0188088A // (0x08A | ACT_FLAG_AIR | ACT_FLAG_DIVING | ACT_FLAG_ATTACKING | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION)
 #define ACT_DIVE_SLIDE                 0x00880456 // (0x056 | ACT_FLAG_MOVING | ACT_FLAG_DIVING | ACT_FLAG_ATTACKING)
 
+#define DEFAULT_LEN_2CH 0x280
+
 
 struct SM64Surface
 {
@@ -179,5 +181,8 @@ extern SM64_LIB_FN void sm64_mario_delete( int32_t marioId );
 extern SM64_LIB_FN uint32_t sm64_surface_object_create( const struct SM64SurfaceObject *surfaceObject );
 extern SM64_LIB_FN void sm64_surface_object_move( uint32_t objectId, const struct SM64ObjectTransform *transform );
 extern SM64_LIB_FN void sm64_surface_object_delete( uint32_t objectId );
+
+extern SM64_LIB_FN void sm64_create_next_audio_buffer( int16_t *samples, uint32_t num_samples );
+extern SM64_LIB_FN void sm64_load_sound_data_from_rom( void *SoundDataADSR, void *SoundDataRaw, void *MusicData, void *BankSetsData );
 
 #endif//LIB_SM64_H
