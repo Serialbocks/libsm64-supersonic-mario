@@ -7,7 +7,7 @@
 #include "../include/sm64.h"
 
 #include "area.h"
-// #include "audio/external.h"
+//#include "audio/external.h"
 // #include "behavior_actions.h"
 // #include "behavior_data.h"
 #include "camera.h"
@@ -264,9 +264,7 @@ void play_mario_jump_sound(struct MarioState *m) {
                        m->marioObj->header.gfx.cameraToObject);
         } else {
 #endif
-            u32 randInt = gAreaUpdateCounter % 3;
-            u32 randSound = randInt == 0 ? SOUND_MARIO_YAH : randInt == 1 ? SOUND_MARIO_WAH : SOUND_MARIO_HOO;
-            play_sound(randSound,
+            play_sound(SOUND_MARIO_YAH_WAH_HOO + ((gAudioRandom % 3) << 16),
                        m->marioObj->header.gfx.cameraToObject);
 #ifndef VERSION_JP
         }

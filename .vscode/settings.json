@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "external.h": "c",
+        "mario_geo_switch_case_ids.h": "c",
+        "types.h": "c"
+    }
+}

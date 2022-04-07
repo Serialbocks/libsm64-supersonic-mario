@@ -540,9 +540,7 @@ s32 act_backflip(struct MarioState *m) {
         return set_mario_action(m, ACT_GROUND_POUND, 0);
     }
 
-    u32 randInt = gBlinkUpdateCounter % 3;
-    u32 randSound = randInt == 0 ? SOUND_MARIO_YAH : randInt == 1 ? SOUND_MARIO_WAH : SOUND_MARIO_HOO;
-    play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, randSound);
+    play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, SOUND_MARIO_YAH_WAH_HOO);
     common_air_action_step(m, ACT_BACKFLIP_LAND, MARIO_ANIM_BACKFLIP, 0);
 #ifdef VERSION_SH
     if (m->action == ACT_BACKFLIP_LAND) {
