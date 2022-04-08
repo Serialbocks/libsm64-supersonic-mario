@@ -236,8 +236,8 @@ u16 sLevelAcousticReaches[LEVEL_COUNT] = {
 #define VOLUME_RANGE_UNK1 0.8f
 #define VOLUME_RANGE_UNK2 1.0f
 #else
-#define VOLUME_RANGE_UNK1 0.9f
-#define VOLUME_RANGE_UNK2 0.8f
+#define VOLUME_RANGE_UNK1 1.0f
+#define VOLUME_RANGE_UNK2 1.0f
 #endif
 
 // Default volume for background music sequences (playing on player 0).
@@ -1194,7 +1194,7 @@ static f32 get_sound_volume(u8 bank, u8 soundIndex, f32 volumeRange) {
     f32 maxSoundDistance;
     f32 intensity;
 #ifndef VERSION_JP
-    s32 div = bank < 3 ? 2 : 3;
+    s32 div = bank < 3 ? 4 : 6;
 #endif
 
     if (!(sSoundBanks[bank][soundIndex].soundBits & SOUND_NO_VOLUME_LOSS)) {
