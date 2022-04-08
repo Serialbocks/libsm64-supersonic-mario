@@ -25,13 +25,14 @@
 #include "decomp/mario/geo.inc.h"
 #include "decomp/game/platform_displacement.h"
 #include "decomp/game/interaction.h"
+#include "decomp/audio/load.h"
+#include "decomp/include/types.h"
 
 #include "debug_print.h"
 #include "load_surfaces.h"
 #include "gfx_adapter.h"
 #include "load_anim_data.h"
 #include "load_tex_data.h"
-#include "load_sound_data.h"
 #include "obj_pool.h"
 
 static struct AllocOnlyPool *s_mario_geo_pool = NULL;
@@ -97,7 +98,6 @@ SM64_LIB_FN void sm64_global_init( uint8_t *rom,
     load_mario_anims_from_rom( rom );
 
     memory_init();
-    //load_sound_data_from_rom(rom);
 }
 
 SM64_LIB_FN void sm64_global_terminate( void )
@@ -259,7 +259,6 @@ SM64_LIB_FN void sm64_mario_tick(
 
     gfx_adapter_bind_output_buffers( outBuffers );
 
-    audio_signal_game_loop_tick();
     if(isInput || gMarioState->marioObj->header.gfx.animInfo.animID >= 0)
         geo_process_root_hack_single_node( s_mario_graph_node );
 
@@ -365,5 +364,15 @@ SM64_LIB_FN void sm64_load_sound_data( uint8_t *bank_sets,
 SM64_LIB_FN void sm64_mario_set_camera_to_object(float x, float y, float z)
 {
     vec3f_set(gMarioObject->header.gfx.cameraToObject, x, y, z);
+}
+
+SM64_LIB_FN void sm64_stop_continuous_sounds()
+{
+    stop_sounds_in_continuous_banks();
+}
+
+SM64_LIB_FN void sm64_audio_tick()
+{
+    audio_signal_game_loop_tick();
 }
 

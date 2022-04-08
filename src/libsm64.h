@@ -192,5 +192,7 @@ extern SM64_LIB_FN void sm64_load_sound_data( uint8_t *bank_sets,
     int ctl_len,
     int tbl_len );
 extern SM64_LIB_FN void sm64_mario_set_camera_to_object(float x, float y, float z);
+extern SM64_LIB_FN void sm64_stop_continuous_sounds();
+extern SM64_LIB_FN void sm64_audio_tick();
 
 #endif//LIB_SM64_H
