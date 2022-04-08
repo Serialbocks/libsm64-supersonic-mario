@@ -201,14 +201,14 @@ struct Object *hack_allocate_mario(void)
 /**
  * Mario's primary behavior update function.
  */
-void bhv_mario_update(uint8_t isInput) {
+void bhv_mario_update() {
     u32 particleFlags = 0;
 //  s32 i;
 
 	gCurrentObject = gMarioObject;
-    if (isInput)
+    if (gMarioState->isLocalMario)
     {
-        particleFlags = execute_mario_action(gCurrentObject, isInput);
+        particleFlags = execute_mario_action(gCurrentObject);
     }
     gCurrentObject->oMarioParticleFlags = particleFlags;
 

@@ -184,9 +184,7 @@ SM64_LIB_FN void sm64_mario_tick(
     struct SM64MarioInputs *inputs,
     struct SM64MarioState *outState,
     struct SM64MarioGeometryBuffers *outBuffers,
-    struct SM64MarioBodyState *outBodyState,
-    uint8_t isInput,
-    uint8_t giveWingcap)
+    struct SM64MarioBodyState *outBodyState)
 {
     if( marioId >= s_mario_instance_pool.size || s_mario_instance_pool.objects[marioId] == NULL )
     {
@@ -195,15 +193,18 @@ SM64_LIB_FN void sm64_mario_tick(
     }
 
     global_state_bind( ((struct MarioInstance *)s_mario_instance_pool.objects[ marioId ])->globalState );
-
-    if( isInput && giveWingcap )
-    {
-        gMarioState->flags |= MARIO_WING_CAP;
-    }
+    gMarioState->isLocalMario = inputs->isInput;
 
     struct MarioBodyState *bodyState = &g_state->mgBodyStates[0];
-    if(isInput)
+    if( gMarioState->isLocalMario )
     {
+        gSoundBankCopyIndex = 0;
+
+        if( inputs->giveWingcap )
+        {
+            gMarioState->flags |= MARIO_WING_CAP;
+        }
+
         update_button( inputs->buttonA, A_BUTTON );
         update_button( inputs->buttonB, B_BUTTON );
         update_button( inputs->buttonZ, Z_TRIG );
@@ -215,23 +216,23 @@ SM64_LIB_FN void sm64_mario_tick(
         gController.stickMag = sqrtf( gController.stickX*gController.stickX + gController.stickY*gController.stickY );
 
         // If mario is flying, invert the controls
-        if(bodyState->action & ACT_FLAG_SWIMMING_OR_FLYING)
+        if( bodyState->action & ACT_FLAG_SWIMMING_OR_FLYING )
         {
             gController.stickY *= -1;
             gController.stickX *= -1;
         }
-        gSoundMask = 0;
+        gSoundBits = 0;
 
         gMarioState->isBoosting = inputs->isBoosting;
         gMarioState->bljState = inputs->bljInput.bljState;
         gMarioState->bljVel = inputs->bljInput.bljVel;
 
-        if(inputs->attackInput.isAttacked) {
-            inputs->attackInput.isAttacked = mario_knockback_from_position(gMarioState,
+        if( inputs->attackInput.isAttacked ) {
+            inputs->attackInput.isAttacked = mario_knockback_from_position( gMarioState,
                                                             inputs->attackInput.attackedPosX,
                                                             inputs->attackInput.attackedPosY,
                                                             inputs->attackInput.attackedPosZ,
-                                                            1);
+                                                            1 );
             outState->isAttacked = inputs->attackInput.isAttacked;
         } else {
             outState->isAttacked = 0;
@@ -251,18 +252,25 @@ SM64_LIB_FN void sm64_mario_tick(
         gMarioState->marioObj->header.gfx.pos[1] = outBodyState->marioState.posY;
         gMarioState->marioObj->header.gfx.pos[2] = outBodyState->marioState.posZ;
         gBlinkUpdateCounter = outBodyState->areaUpdateCounter;
+
+        if( outBodyState->marioState.soundBits != 0 )
+        {
+            gSoundBankCopyIndex = inputs->remoteMarioIndex + 1;
+            gSoundBits = outBodyState->marioState.soundBits;
+            play_sound( outBodyState->marioState.soundBits, gMarioState->marioObj->header.gfx.cameraToObject );
+        }
     }
 
     apply_mario_platform_displacement();
-    bhv_mario_update(isInput);
+    bhv_mario_update();
     update_mario_platform();
 
     gfx_adapter_bind_output_buffers( outBuffers );
 
-    if(isInput || gMarioState->marioObj->header.gfx.animInfo.animID >= 0)
+    if(gMarioState->isLocalMario || gMarioState->marioObj->header.gfx.animInfo.animID >= 0)
         geo_process_root_hack_single_node( s_mario_graph_node );
 
-    if(isInput)
+    if(gMarioState->isLocalMario)
     {
         memcpy( outBodyState, bodyState, sizeof( struct MarioBodyState ));
         outBodyState->animFrame = gMarioState->marioObj->header.gfx.animInfo.animFrame;
@@ -281,7 +289,7 @@ SM64_LIB_FN void sm64_mario_tick(
         outState->velY = gMarioState->vel[1];
         outState->velZ = gMarioState->vel[2];
         outState->faceAngle = (float)gMarioState->faceAngle[1] / 32768.0f * 3.14159f;
-        outState->soundMask = gSoundMask;
+        outState->soundBits = gSoundBits;
 
         memcpy(&outBodyState->marioState, outState, sizeof(struct SM64MarioState));
     }
@@ -343,27 +351,27 @@ SM64_LIB_FN void sm64_load_sound_data( uint8_t *bank_sets,
     int ctl_len,
     int tbl_len )
 {
-    if (bank_set_len != 0 & sequences_len != 0 & ctl_len != 0 & tbl_len != 0)
+    if( bank_set_len != 0 & sequences_len != 0 & ctl_len != 0 & tbl_len != 0 )
     {
-        gBankSetsData=malloc(bank_set_len);
-        gMusicData=malloc(sequences_len);
-        gSoundDataADSR=malloc(ctl_len);
-        gSoundDataRaw=malloc(tbl_len);
-        memcpy(gBankSetsData,bank_sets,bank_set_len);
-        memcpy(gMusicData,sequences_bin,sequences_len);
-        memcpy(gSoundDataADSR,sound_data_ctl,ctl_len);
-        memcpy(gSoundDataRaw,sound_data_tbl,tbl_len);
+        gBankSetsData = malloc( bank_set_len );
+        gMusicData = malloc( sequences_len );
+        gSoundDataADSR = malloc( ctl_len );
+        gSoundDataRaw = malloc( tbl_len );
+        memcpy( gBankSetsData, bank_sets, bank_set_len );
+        memcpy( gMusicData,sequences_bin,sequences_len );
+        memcpy( gSoundDataADSR, sound_data_ctl, ctl_len );
+        memcpy( gSoundDataRaw, sound_data_tbl, tbl_len );
 
         audio_init();
         sound_init();
-        sound_reset(0);
+        sound_reset( 0 );
     }
 
 }
 
-SM64_LIB_FN void sm64_mario_set_camera_to_object(float x, float y, float z)
+SM64_LIB_FN void sm64_mario_set_camera_to_object( float x, float y, float z )
 {
-    vec3f_set(gMarioObject->header.gfx.cameraToObject, x, y, z);
+    vec3f_set( gMarioObject->header.gfx.cameraToObject, x, y, z );
 }
 
 SM64_LIB_FN void sm64_stop_continuous_sounds()

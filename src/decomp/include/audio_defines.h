@@ -37,6 +37,8 @@
 #define SOUND_BANK_OBJ2       9
 #define SOUND_BANK_COUNT     10
 
+#define SOUND_BANK_COPIES    10
+
 #define SOUND_BANKS_ALL_BITS 0xffff
 #define SOUND_BANKS_ALL ((1 << SOUND_BANK_COUNT) - 1)
 #define SOUND_BANKS_FOREGROUND (\

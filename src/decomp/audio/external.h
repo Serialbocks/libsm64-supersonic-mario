@@ -2,8 +2,8 @@
 #define AUDIO_EXTERNAL_H
 
 #include "../include/PR/ultratypes.h"
-
 #include "../include/types.h"
+#include "../shim.h"
 
 // Sequence arguments, passed to seq_player_play_sequence. seqId may be bit-OR'ed with
 // SEQ_VARIATION; this will load the same sequence, but set a variation
@@ -27,6 +27,9 @@ extern u32 gAudioRandom;
 extern u8 gAudioSPTaskYieldBuffer[]; // ucode yield data ptr; only used in JP
 
 extern f32 gGlobalVolume;
+
+extern u32 gSoundBits;
+extern u8 gSoundBankCopyIndex;
 
 struct SPTask *create_next_audio_frame_task(void);
 void create_next_audio_buffer(s16 * samples, u32 num_samples);

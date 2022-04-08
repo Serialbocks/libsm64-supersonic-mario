@@ -33,7 +33,6 @@
 #define gMarioState          (&g_state->mgMarioStateVal)
 #define gAreaUpdateCounter   (g_state->mgAreaUpdateCounter)
 #define gBlinkUpdateCounter  (g_state->mgBlinkUpdateCounter)
-#define gSoundMask           (g_state->mgSoundMask)
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
