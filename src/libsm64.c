@@ -92,7 +92,11 @@ SM64_LIB_FN void sm64_global_init( uint8_t *rom,
     g_debug_print_func = debugPrintFunction;
 
     load_mario_textures_from_rom( rom, outTexture, false );
-    load_mario_textures_from_rom( rom, altTexture, true );
+    if(altTexture != NULL)
+    {
+        load_mario_textures_from_rom( rom, altTexture, true );
+    }
+
     load_mario_anims_from_rom( rom );
 
     memory_init();
