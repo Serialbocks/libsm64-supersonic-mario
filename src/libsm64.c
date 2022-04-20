@@ -192,7 +192,7 @@ SM64_LIB_FN void sm64_mario_tick(
     uint8_t isInput,
     uint8_t giveWingcap)
 {
-    uint8_t shouldUpdate = get_interpolation_should_update();
+    outState->isUpdateFrame = get_interpolation_should_update();
     if( marioId >= s_mario_instance_pool.size || s_mario_instance_pool.objects[marioId] == NULL )
     {
         DEBUG_PRINT("Tried to tick non-existant Mario with ID: %u", marioId);
@@ -207,8 +207,23 @@ SM64_LIB_FN void sm64_mario_tick(
     }
 
     struct MarioBodyState *bodyState = &g_state->mgBodyStates[0];
-    if(isInput && shouldUpdate)
+    if(isInput && outState->isUpdateFrame)
     {
+        vec3f_copy(gMarioState->prevPos, gMarioState->pos);
+        vec3f_copy(gMarioState->prevVel, gMarioState->vel);
+        vec3s_copy(gMarioState->prevFaceAngle, gMarioState->faceAngle);
+
+        vec3s_copy(gMarioObject->header.gfx.prevAngle, gMarioObject->header.gfx.angle);
+        vec3f_copy(gMarioObject->header.gfx.prevPos, gMarioObject->header.gfx.pos);
+        vec3f_copy(gMarioObject->header.gfx.prevScale, gMarioObject->header.gfx.scale);
+
+        gMarioObject->header.gfx.hasPrevThrowMatrix = gMarioObject->header.gfx.throwMatrix != NULL;
+
+        if (gMarioObject->header.gfx.hasPrevThrowMatrix)
+            mtxf_copy(gMarioObject->header.gfx.prevThrowMatrix, *gMarioObject->header.gfx.throwMatrix);
+
+        gMarioObject->header.gfx.throwMatrix = NULL;
+
         update_button( inputs->buttonA, A_BUTTON );
         update_button( inputs->buttonB, B_BUTTON );
         update_button( inputs->buttonZ, Z_TRIG );
@@ -252,19 +267,16 @@ SM64_LIB_FN void sm64_mario_tick(
         gMarioState->marioObj->header.gfx.animInfo.animID = outBodyState->animIndex;
         gMarioState->marioObj->header.gfx.animInfo.animYTrans = outBodyState->animYTrans;
         gMarioState->marioObj->header.gfx.angle[1] = outBodyState->gfxFaceAngle;
-        gMarioState->marioObj->header.gfx.pos[0] = outBodyState->marioState.posX;
-        gMarioState->marioObj->header.gfx.pos[1] = outBodyState->marioState.posY;
-        gMarioState->marioObj->header.gfx.pos[2] = outBodyState->marioState.posZ;
+        vec3f_copy(gMarioState->marioObj->header.gfx.pos, outBodyState->marioState.position);
         gBlinkUpdateCounter = outBodyState->areaUpdateCounter;
     }
 
-    if(!isInput || shouldUpdate)
+    if(!isInput || outState->isUpdateFrame)
     {
         apply_mario_platform_displacement();
         bhv_mario_update(isInput);
         update_mario_platform();
     }
-
 
     gfx_adapter_bind_output_buffers( outBuffers );
 
@@ -283,17 +295,22 @@ SM64_LIB_FN void sm64_mario_tick(
         gAreaUpdateCounter++;
         gBlinkUpdateCounter = gAreaUpdateCounter;
         outState->health = gMarioState->health;
-        outState->posX = gMarioState->pos[0];
-        outState->posY = gMarioState->pos[1];
-        outState->posZ = gMarioState->pos[2];
-        outState->velX = gMarioState->vel[0];
-        outState->velY = gMarioState->vel[1];
-        outState->velZ = gMarioState->vel[2];
-        outState->faceAngle = (float)gMarioState->faceAngle[1] / 32768.0f * 3.14159f;
+        vec3f_copy(outState->velocity, gMarioState->vel);
+        outState->faceAngle = (float)gMarioState->faceAngle[1] / 32768.0f * M_PI;
         outState->soundMask = gSoundMask;
 
         memcpy(&outBodyState->marioState, outState, sizeof(struct SM64MarioState));
 
+        vec3f_copy(outState->position, gMarioState->pos);
+        outState->faceAngle = gMarioState->faceAngle[1] / 32768.0f * M_PI;
+    
+        vec3f_interpolate(outState->interpolatedPosition, gMarioState->prevPos, gMarioState->pos);
+        vec3f_interpolate(outState->interpolatedVelocity, gMarioState->prevVel, gMarioState->vel);
+        outState->interpolatedFaceAngle =
+            s16_angle_interpolate(gMarioState->prevFaceAngle[1], gMarioState->faceAngle[1]) / 32768.0f
+            * M_PI;
+        vec3f_interpolate(outState->interpolatedGfxPosition, gMarioObject->header.gfx.prevPos,
+                      gMarioObject->header.gfx.pos);
         increment_interpolation_frame();
         gAreaUpdateCounter = get_interpolation_area_update_counter();
     }

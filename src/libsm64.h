@@ -55,8 +55,8 @@ struct SM64Surface
 
 struct SM64MarioState
 {
-    float posX, posY, posZ;
-    float velX, velY, velZ;
+    float position[3];
+    float velocity[3];
     float faceAngle;
     int16_t health;
 
@@ -64,6 +64,13 @@ struct SM64MarioState
     uint32_t soundMask;
     // Whether mario was attacked and took damage
     uint8_t isAttacked;
+
+    // Interpolation
+    float interpolatedPosition[3];
+    float interpolatedGfxPosition[3];
+    float interpolatedVelocity[3];
+    float interpolatedFaceAngle;
+    uint8_t isUpdateFrame;
 };
 
 struct SM64MarioBodyState
