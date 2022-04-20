@@ -3,6 +3,7 @@
 
 #include "decomp/include/types.h"
 #include "decomp/include/PR/ultratypes.h"
+#include "decomp/shim.h"
 
 void set_interpolation_interval(u32 interval);
 f32 get_interpolation_delta_time(void);
