@@ -178,6 +178,8 @@ SM64_LIB_FN int32_t sm64_mario_create( int16_t x, int16_t y, int16_t z )
     set_mario_action( gMarioState, ACT_SPAWN_SPIN_AIRBORNE, 0);
     find_floor( x, y, z, &gMarioState->floor );
 
+    set_interpolation_interval(2);
+
     return marioIndex;
 }
 
@@ -190,6 +192,7 @@ SM64_LIB_FN void sm64_mario_tick(
     uint8_t isInput,
     uint8_t giveWingcap)
 {
+    uint8_t shouldUpdate = get_interpolation_should_update();
     if( marioId >= s_mario_instance_pool.size || s_mario_instance_pool.objects[marioId] == NULL )
     {
         DEBUG_PRINT("Tried to tick non-existant Mario with ID: %u", marioId);
@@ -204,7 +207,7 @@ SM64_LIB_FN void sm64_mario_tick(
     }
 
     struct MarioBodyState *bodyState = &g_state->mgBodyStates[0];
-    if(isInput)
+    if(isInput && shouldUpdate)
     {
         update_button( inputs->buttonA, A_BUTTON );
         update_button( inputs->buttonB, B_BUTTON );
@@ -239,7 +242,7 @@ SM64_LIB_FN void sm64_mario_tick(
             outState->isAttacked = 0;
         }
     }
-    else
+    else if(!isInput)
     {
         memcpy(bodyState, outBodyState, sizeof(struct MarioBodyState));
         load_mario_animation(gMarioState->animation, outBodyState->animIndex);
@@ -255,9 +258,13 @@ SM64_LIB_FN void sm64_mario_tick(
         gBlinkUpdateCounter = outBodyState->areaUpdateCounter;
     }
 
-    apply_mario_platform_displacement();
-    bhv_mario_update(isInput);
-    update_mario_platform();
+    if(!isInput || shouldUpdate)
+    {
+        apply_mario_platform_displacement();
+        bhv_mario_update(isInput);
+        update_mario_platform();
+    }
+
 
     gfx_adapter_bind_output_buffers( outBuffers );
 
@@ -286,6 +293,9 @@ SM64_LIB_FN void sm64_mario_tick(
         outState->soundMask = gSoundMask;
 
         memcpy(&outBodyState->marioState, outState, sizeof(struct SM64MarioState));
+
+        increment_interpolation_frame();
+        gAreaUpdateCounter = get_interpolation_area_update_counter();
     }
 }
 
