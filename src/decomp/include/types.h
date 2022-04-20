@@ -381,6 +381,7 @@ struct MarioState
     u8 isBoosting;
     u8 bljState; // 0: Off, 1: Press, 2: Hold
     u8 bljVel;
+    u8 isInput;
 
     // interpolation
     Vec3f prevPos;

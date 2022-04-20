@@ -49,7 +49,7 @@ s32 check_common_action_exits(struct MarioState *m);
 s32 check_common_hold_action_exits(struct MarioState *m);
 s32 transition_submerged_to_walking(struct MarioState *m);
 s32 set_water_plunge_action(struct MarioState *m);
-s32 execute_mario_action(UNUSED struct Object *o, uint8_t isInput);
+s32 execute_mario_action(UNUSED struct Object *o);
 int init_mario(void);
 void init_mario_from_save_file(void);
 

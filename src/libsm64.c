@@ -188,9 +188,7 @@ SM64_LIB_FN void sm64_mario_tick(
     struct SM64MarioInputs *inputs,
     struct SM64MarioState *outState,
     struct SM64MarioGeometryBuffers *outBuffers,
-    struct SM64MarioBodyState *outBodyState,
-    uint8_t isInput,
-    uint8_t giveWingcap)
+    struct SM64MarioBodyState *outBodyState)
 {
     outState->isUpdateFrame = get_interpolation_should_update();
     if( marioId >= s_mario_instance_pool.size || s_mario_instance_pool.objects[marioId] == NULL )
@@ -201,14 +199,21 @@ SM64_LIB_FN void sm64_mario_tick(
 
     global_state_bind( ((struct MarioInstance *)s_mario_instance_pool.objects[ marioId ])->globalState );
 
-    if( isInput && giveWingcap )
-    {
-        gMarioState->flags |= MARIO_WING_CAP;
-    }
+    gMarioState->isInput = inputs->isInput;
 
     struct MarioBodyState *bodyState = &g_state->mgBodyStates[0];
-    if(isInput && outState->isUpdateFrame)
+    
+    if(gMarioState->isInput && outState->isUpdateFrame)
     {
+        if(inputs->giveWingcap)
+        {
+            gMarioState->flags |= MARIO_WING_CAP;
+        }
+        else
+        {
+            gMarioState->flags &= ~MARIO_WING_CAP;
+        }
+
         vec3f_copy(gMarioState->prevPos, gMarioState->pos);
         vec3f_copy(gMarioState->prevVel, gMarioState->vel);
         vec3s_copy(gMarioState->prevFaceAngle, gMarioState->faceAngle);
@@ -257,7 +262,7 @@ SM64_LIB_FN void sm64_mario_tick(
             outState->isAttacked = 0;
         }
     }
-    else if(!isInput)
+    else if(!gMarioState->isInput)
     {
         memcpy(bodyState, outBodyState, sizeof(struct MarioBodyState));
         load_mario_animation(gMarioState->animation, outBodyState->animIndex);
@@ -271,19 +276,19 @@ SM64_LIB_FN void sm64_mario_tick(
         gBlinkUpdateCounter = outBodyState->areaUpdateCounter;
     }
 
-    if(!isInput || outState->isUpdateFrame)
+    if(!gMarioState->isInput || outState->isUpdateFrame)
     {
         apply_mario_platform_displacement();
-        bhv_mario_update(isInput);
+        bhv_mario_update();
         update_mario_platform();
     }
 
     gfx_adapter_bind_output_buffers( outBuffers );
 
-    if(isInput || gMarioState->marioObj->header.gfx.animInfo.animID >= 0)
+    if(gMarioState->isInput || gMarioState->marioObj->header.gfx.animInfo.animID >= 0)
         geo_process_root_hack_single_node( s_mario_graph_node );
 
-    if(isInput)
+    if(gMarioState->isInput)
     {
         memcpy( outBodyState, bodyState, sizeof( struct MarioBodyState ));
         outBodyState->animFrame = gMarioState->marioObj->header.gfx.animInfo.animFrame;
