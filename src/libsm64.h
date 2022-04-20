@@ -133,7 +133,6 @@ struct SM64MarioInputs
     uint8_t isBoosting;
     uint8_t isInput;
     uint8_t giveWingcap;
-    uint32_t interpolationInterval;
 };
 
 struct SM64ObjectTransform
@@ -187,5 +186,8 @@ extern SM64_LIB_FN void sm64_mario_delete( int32_t marioId );
 extern SM64_LIB_FN uint32_t sm64_surface_object_create( const struct SM64SurfaceObject *surfaceObject );
 extern SM64_LIB_FN void sm64_surface_object_move( uint32_t objectId, const struct SM64ObjectTransform *transform );
 extern SM64_LIB_FN void sm64_surface_object_delete( uint32_t objectId );
+
+extern SM64_LIB_FN uint8_t sm64_get_interpolation_should_update(void);
+extern SM64_LIB_FN void sm64_set_interpolation_interval(uint32_t interval);
 
 #endif//LIB_SM64_H

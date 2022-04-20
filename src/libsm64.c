@@ -100,6 +100,8 @@ SM64_LIB_FN void sm64_global_init( uint8_t *rom,
     load_mario_anims_from_rom( rom );
 
     memory_init();
+
+    set_interpolation_interval(1);
 }
 
 SM64_LIB_FN void sm64_global_terminate( void )
@@ -196,11 +198,10 @@ SM64_LIB_FN void sm64_mario_tick(
     }
 
     global_state_bind( ((struct MarioInstance *)s_mario_instance_pool.objects[ marioId ])->globalState );
-    gMarioState->isInput = inputs->isInput;
-    struct MarioBodyState *bodyState = &g_state->mgBodyStates[0];
 
-    if(get_interpolation_should_update() || (!gMarioState->isInput && outBodyState->marioState.isUpdateFrame))
-        set_interpolation_interval(inputs->interpolationInterval);
+    gMarioState->isInput = inputs->isInput;
+
+    struct MarioBodyState *bodyState = &g_state->mgBodyStates[0];
     
     if(gMarioState->isInput && outState->isUpdateFrame)
     {
@@ -287,19 +288,6 @@ SM64_LIB_FN void sm64_mario_tick(
     if(gMarioState->isInput || gMarioState->marioObj->header.gfx.animInfo.animID >= 0)
         geo_process_root_hack_single_node( s_mario_graph_node );
 
-    vec3f_copy(outState->position, gMarioState->pos);
-    outState->faceAngle = gMarioState->faceAngle[1] / 32768.0f * M_PI;
-
-    vec3f_interpolate(outState->interpolatedPosition, gMarioState->prevPos, gMarioState->pos);
-    vec3f_interpolate(outState->interpolatedVelocity, gMarioState->prevVel, gMarioState->vel);
-    outState->interpolatedFaceAngle =
-        s16_angle_interpolate(gMarioState->prevFaceAngle[1], gMarioState->faceAngle[1]) / 32768.0f
-        * M_PI;
-    vec3f_interpolate(outState->interpolatedGfxPosition, gMarioObject->header.gfx.prevPos,
-                    gMarioObject->header.gfx.pos);
-    increment_interpolation_frame();
-    gAreaUpdateCounter = get_interpolation_area_update_counter();
-
     if(gMarioState->isInput)
     {
         memcpy( outBodyState, bodyState, sizeof( struct MarioBodyState ));
@@ -317,6 +305,19 @@ SM64_LIB_FN void sm64_mario_tick(
         outState->soundMask = gSoundMask;
 
         memcpy(&outBodyState->marioState, outState, sizeof(struct SM64MarioState));
+
+        vec3f_copy(outState->position, gMarioState->pos);
+        outState->faceAngle = gMarioState->faceAngle[1] / 32768.0f * M_PI;
+    
+        vec3f_interpolate(outState->interpolatedPosition, gMarioState->prevPos, gMarioState->pos);
+        vec3f_interpolate(outState->interpolatedVelocity, gMarioState->prevVel, gMarioState->vel);
+        outState->interpolatedFaceAngle =
+            s16_angle_interpolate(gMarioState->prevFaceAngle[1], gMarioState->faceAngle[1]) / 32768.0f
+            * M_PI;
+        vec3f_interpolate(outState->interpolatedGfxPosition, gMarioObject->header.gfx.prevPos,
+                      gMarioObject->header.gfx.pos);
+        increment_interpolation_frame();
+        gAreaUpdateCounter = get_interpolation_area_update_counter();
     }
 }
 
@@ -360,4 +361,14 @@ SM64_LIB_FN void sm64_surface_object_delete( uint32_t objectId )
     }
 
     surfaces_unload_object( objectId );
+}
+
+SM64_LIB_FN uint8_t sm64_get_interpolation_should_update(void)
+{
+    return get_interpolation_should_update();
+}
+
+SM64_LIB_FN void sm64_set_interpolation_interval(uint32_t interval)
+{
+    set_interpolation_interval(interval);
 }

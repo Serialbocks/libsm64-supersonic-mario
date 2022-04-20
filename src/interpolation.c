@@ -2,15 +2,16 @@
 #include "decomp/engine/math_util.h"
 
 u32 interpolationInterval;
-
+u32 interpolationFrame;
+u32 interpolationOffset;
 f32 interpolationFactorA;
 f32 interpolationFactorB;
 
 void set_interpolation_interval(u32 interval) {
-    gMarioState->interpolationFrame *= interpolationInterval;
-    gMarioState->interpolationFrame /= interval;
+    interpolationFrame *= interpolationInterval;
+    interpolationFrame /= interval;
     interpolationInterval = interval;
-    gMarioState->interpolationOffset = 0;
+    interpolationOffset = 0;
     if (interpolationInterval > 1) {
         interpolationFactorA = 1.0f;
         interpolationFactorB = 0.0f;
@@ -25,28 +26,28 @@ f32 get_interpolation_delta_time(void) {
 }
 
 void increment_interpolation_frame(void) {
-    gMarioState->interpolationFrame = gMarioState->interpolationFrame + 1;
+    interpolationFrame = interpolationFrame + 1;
     if (interpolationInterval > 1) {
-        gMarioState->interpolationOffset = gMarioState->interpolationFrame % interpolationInterval;
-        interpolationFactorB = (f32) gMarioState->interpolationOffset / (f32) interpolationInterval;
+        interpolationOffset = interpolationFrame % interpolationInterval;
+        interpolationFactorB = (f32) interpolationOffset / (f32) interpolationInterval;
         interpolationFactorA = 1 - interpolationFactorB;
     } else {
-        gMarioState->interpolationOffset = 0;
+        interpolationOffset = 0;
         interpolationFactorA = 0.0f;
         interpolationFactorB = 1.0f;
     }
 }
 
 u16 get_interpolation_area_update_counter(void) {
-    return gMarioState->interpolationFrame / interpolationInterval;
+    return interpolationFrame / interpolationInterval;
 }
 
 u8 get_interpolation_should_update(void) {
-    return gMarioState->interpolationOffset == 0;
+    return interpolationOffset == 0;
 }
 
 u8 get_interpolation_gonna_update(void) {
-    return gMarioState->interpolationOffset == (interpolationInterval - 1);
+    return interpolationOffset == (interpolationInterval - 1);
 }
 
 f32 f32_interpolate(f32 a, f32 b) {
