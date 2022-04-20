@@ -100,6 +100,8 @@ SM64_LIB_FN void sm64_global_init( uint8_t *rom,
     load_mario_anims_from_rom( rom );
 
     memory_init();
+
+    set_interpolation_interval(1);
 }
 
 SM64_LIB_FN void sm64_global_terminate( void )
@@ -177,8 +179,6 @@ SM64_LIB_FN int32_t sm64_mario_create( int16_t x, int16_t y, int16_t z )
 
     set_mario_action( gMarioState, ACT_SPAWN_SPIN_AIRBORNE, 0);
     find_floor( x, y, z, &gMarioState->floor );
-
-    set_interpolation_interval(2);
 
     return marioIndex;
 }
@@ -356,4 +356,14 @@ SM64_LIB_FN void sm64_surface_object_delete( uint32_t objectId )
     }
 
     surfaces_unload_object( objectId );
+}
+
+SM64_LIB_FN uint8_t sm64_get_interpolation_should_update(void)
+{
+    return get_interpolation_should_update();
+}
+
+SM64_LIB_FN void sm64_set_interpolation_interval(uint32_t interval)
+{
+    set_interpolation_interval(interval);
 }
