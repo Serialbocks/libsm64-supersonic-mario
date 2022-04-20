@@ -379,13 +379,17 @@ static void geo_process_translation_rotation(struct GraphNodeTranslationRotation
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
 
     vec3s_to_vec3f(translation, node->translation);
-    vec3f_interpolate(translation, node->prevTranslation, translation);
-    vec3s_angle_interpolate(rotation, node->prevRotation, node->rotation);
+    if(gMarioState->isInput)
+    {
+        vec3f_interpolate(translation, node->prevTranslation, translation);
+        vec3s_angle_interpolate(rotation, node->prevRotation, node->rotation);
 
-    if (get_interpolation_gonna_update()) {
-        vec3s_to_vec3f(node->prevTranslation, node->translation);
-        vec3s_copy(node->prevRotation, node->rotation);
+        if (get_interpolation_gonna_update()) {
+            vec3s_to_vec3f(node->prevTranslation, node->translation);
+            vec3s_copy(node->prevRotation, node->rotation);
+        }
     }
+
 
     mtxf_rotate_zxy_and_translate(mtxf, translation, rotation);
     mtxf_mul(gMatStack[gMatStackIndex + 1], mtxf, gMatStack[gMatStackIndex]);
@@ -412,10 +416,13 @@ static void geo_process_translation(struct GraphNodeTranslation *node) {
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
 
     vec3s_to_vec3f(translation, node->translation);
-    vec3f_interpolate(translation, node->prevTranslation, translation);
+    if(gMarioState->isInput)
+    {
+        vec3f_interpolate(translation, node->prevTranslation, translation);
 
-    if (get_interpolation_gonna_update())
-        vec3s_to_vec3f(node->prevTranslation, node->translation);
+        if (get_interpolation_gonna_update())
+            vec3s_to_vec3f(node->prevTranslation, node->translation);
+    }
 
     mtxf_rotate_zxy_and_translate(mtxf, translation, gVec3sZero);
     mtxf_mul(gMatStack[gMatStackIndex + 1], mtxf, gMatStack[gMatStackIndex]);
@@ -441,9 +448,17 @@ static void geo_process_rotation(struct GraphNodeRotation *node) {
     Vec3s rotation;
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
 
-    vec3s_angle_interpolate(rotation, node->prevRotation, node->rotation);
-    if (get_interpolation_gonna_update())
-        vec3s_copy(node->prevRotation, node->rotation);
+    if(gMarioState->isInput)
+    {
+        vec3s_angle_interpolate(rotation, node->prevRotation, node->rotation);
+        if (get_interpolation_gonna_update())
+            vec3s_copy(node->prevRotation, node->rotation);
+    }
+    else
+    {
+        vec3s_copy(rotation, node->rotation);
+    }
+
 
     mtxf_rotate_zxy_and_translate(mtxf, gVec3fZero, rotation);
     mtxf_mul(gMatStack[gMatStackIndex + 1], mtxf, gMatStack[gMatStackIndex]);
@@ -470,9 +485,16 @@ static void geo_process_scale(struct GraphNodeScale *node) {
     Vec3f scaleVec;
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
 
-    scale = f32_interpolate(node->prevScale, node->scale);
-    if (get_interpolation_gonna_update())
-        node->prevScale = node->scale;
+    if(gMarioState->isInput)
+    {
+        scale = f32_interpolate(node->prevScale, node->scale);
+        if (get_interpolation_gonna_update())
+            node->prevScale = node->scale;
+        }
+    else
+    {
+        scale = node->scale;
+    }
 
     vec3f_set(scaleVec, scale, scale, scale);
     mtxf_scale_vec3f(gMatStack[gMatStackIndex + 1], gMatStack[gMatStackIndex], scaleVec);
@@ -668,15 +690,19 @@ static void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
         currRotation[2] = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
     }
 
-    vec3f_interpolate(currTranslation, prevTranslation, currTranslation);
-    vec3s_angle_interpolate(currRotation, prevRotation, currRotation);
 
     Vec3f translation;
     vec3s_to_vec3f(translation, node->translation);
-    vec3f_interpolate(translation, node->prevTranslation, translation);
+    if(gMarioState->isInput)
+    {
+        vec3f_interpolate(currTranslation, prevTranslation, currTranslation);
+        vec3s_angle_interpolate(currRotation, prevRotation, currRotation);
 
-    if (get_interpolation_gonna_update())
-        vec3s_to_vec3f(node->prevTranslation, node->translation);
+        vec3f_interpolate(translation, node->prevTranslation, translation);
+
+        if (get_interpolation_gonna_update())
+            vec3s_to_vec3f(node->prevTranslation, node->translation);
+    }
 
     currTranslation[0] += translation[0];
     currTranslation[1] += translation[1];
@@ -703,7 +729,7 @@ static void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
 void geo_set_animation_globals(struct AnimInfo *node, s32 hasAnimation) {
     struct Animation *anim = node->curAnim;
 
-    if (hasAnimation && get_interpolation_should_update()) {
+    if (hasAnimation && (!gMarioState->isInput || get_interpolation_should_update())) {
         node->animFrame = geo_update_animation_frame(node, &node->animFrameAccelAssist);
     }
 
@@ -736,9 +762,13 @@ void geo_set_animation_globals(struct AnimInfo *node, s32 hasAnimation) {
         gCurAnimTranslationMultiplier = (f32) node->animYTrans / (f32) anim->animYTransDivisor;
     }
 
-    if (get_interpolation_gonna_update() || node->prevAnimID != node->animID || node->prevAnim != anim) {
-        node->prevAnimFrame = node->animFrame;
+    if(gMarioState->isInput)
+    {
+        if (get_interpolation_gonna_update() || node->prevAnimID != node->animID || node->prevAnim != anim) {
+            node->prevAnimFrame = node->animFrame;
+        }
     }
+
 
     node->prevAnimID = node->animID;
     node->prevAnim = anim;
@@ -1224,12 +1254,15 @@ void geo_process_root_hack_single_node(struct GraphNode *node)
     Mat4* throwMatrix = NULL;
 
     Vec3f currScale;
-    vec3f_interpolate(currScale, gMarioObject->header.gfx.prevScale, gMarioObject->header.gfx.scale);
+    if(gMarioState->isInput)
+        vec3f_interpolate(currScale, gMarioObject->header.gfx.prevScale, gMarioObject->header.gfx.scale);
+    else
+        vec3f_copy(currScale, gMarioObject->header.gfx.scale);
 
     if (gMarioObject->header.gfx.throwMatrix != NULL) {
         Mat4 currThrowMatrix;
 
-        if (gMarioObject->header.gfx.hasPrevThrowMatrix)
+        if (gMarioState->isInput && gMarioObject->header.gfx.hasPrevThrowMatrix)
             mtxf_interpolate(currThrowMatrix, gMarioObject->header.gfx.prevThrowMatrix, *gMarioObject->header.gfx.throwMatrix);
         else
             mtxf_copy(currThrowMatrix, *gMarioObject->header.gfx.throwMatrix);
@@ -1239,13 +1272,21 @@ void geo_process_root_hack_single_node(struct GraphNode *node)
         throwMatrix = gMarioObject->header.gfx.throwMatrix;
         gMarioObject->header.gfx.throwMatrix = &gMatStack[++gMatStackIndex];
     }
-
     else {
         Vec3s currAngle;
         Vec3f currPos;
 
-        vec3s_angle_interpolate(currAngle, gMarioObject->header.gfx.prevAngle, gMarioObject->header.gfx.angle);
-        vec3f_interpolate(currPos, gMarioObject->header.gfx.prevPos, gMarioObject->header.gfx.pos);
+        if(gMarioState->isInput)
+        {
+            vec3s_angle_interpolate(currAngle, gMarioObject->header.gfx.prevAngle, gMarioObject->header.gfx.angle);
+            vec3f_interpolate(currPos, gMarioObject->header.gfx.prevPos, gMarioObject->header.gfx.pos);
+        }
+        else
+        {
+            vec3s_copy(currAngle, gMarioObject->header.gfx.angle);
+            vec3f_copy(currPos, gMarioObject->header.gfx.pos);
+        }
+
 
         Mat4 identity, scale, rotTran;
         mtxf_identity( identity );
