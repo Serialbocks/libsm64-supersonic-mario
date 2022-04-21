@@ -207,7 +207,10 @@ void bhv_mario_update() {
 //  s32 i;
 
 	gCurrentObject = gMarioObject;
-    particleFlags = execute_mario_action(gCurrentObject);
+    if(gMarioState->isInput)
+    {
+        particleFlags = execute_mario_action(gCurrentObject);
+    }
     gCurrentObject->oMarioParticleFlags = particleFlags;
 
     // Mario code updates MarioState's versions of position etc, so we need
