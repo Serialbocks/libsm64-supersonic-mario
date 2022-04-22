@@ -67,9 +67,6 @@ struct SM64MarioState
 
     // Interpolation
     float interpolatedPosition[3];
-    float interpolatedGfxPosition[3];
-    float interpolatedVelocity[3];
-    float interpolatedFaceAngle;
     uint8_t isUpdateFrame;
 };
 

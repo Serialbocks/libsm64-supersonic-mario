@@ -310,12 +310,6 @@ SM64_LIB_FN void sm64_mario_tick(
         outState->faceAngle = gMarioState->faceAngle[1] / 32768.0f * M_PI;
     
         vec3f_interpolate(outState->interpolatedPosition, gMarioState->prevPos, gMarioState->pos);
-        vec3f_interpolate(outState->interpolatedVelocity, gMarioState->prevVel, gMarioState->vel);
-        outState->interpolatedFaceAngle =
-            s16_angle_interpolate(gMarioState->prevFaceAngle[1], gMarioState->faceAngle[1]) / 32768.0f
-            * M_PI;
-        vec3f_interpolate(outState->interpolatedGfxPosition, gMarioObject->header.gfx.prevPos,
-                      gMarioObject->header.gfx.pos);
         increment_interpolation_frame();
         gAreaUpdateCounter = get_interpolation_area_update_counter();
     }
