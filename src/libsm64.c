@@ -190,7 +190,7 @@ SM64_LIB_FN void sm64_mario_tick(
     struct SM64MarioGeometryBuffers *outBuffers,
     struct SM64MarioBodyState *outBodyState)
 {
-    outState->isUpdateFrame = get_interpolation_should_update();
+    
     if( marioId >= s_mario_instance_pool.size || s_mario_instance_pool.objects[marioId] == NULL )
     {
         DEBUG_PRINT("Tried to tick non-existant Mario with ID: %u", marioId);
@@ -200,6 +200,15 @@ SM64_LIB_FN void sm64_mario_tick(
     global_state_bind( ((struct MarioInstance *)s_mario_instance_pool.objects[ marioId ])->globalState );
 
     gMarioState->isInput = inputs->isInput;
+
+    if(!gMarioState->hasTicked)
+    {
+        if(gMarioState->isInput)
+            reset_interpolation();
+        gMarioState->hasTicked = true;
+    }
+
+    outState->isUpdateFrame = get_interpolation_should_update();
 
     struct MarioBodyState *bodyState = &g_state->mgBodyStates[0];
     
@@ -304,12 +313,12 @@ SM64_LIB_FN void sm64_mario_tick(
         outState->faceAngle = (float)gMarioState->faceAngle[1] / 32768.0f * M_PI;
         outState->soundMask = gSoundMask;
 
-        memcpy(&outBodyState->marioState, outState, sizeof(struct SM64MarioState));
-
         vec3f_copy(outState->position, gMarioState->pos);
         outState->faceAngle = gMarioState->faceAngle[1] / 32768.0f * M_PI;
     
         vec3f_interpolate(outState->interpolatedPosition, gMarioState->prevPos, gMarioState->pos);
+
+        memcpy(&outBodyState->marioState, outState, sizeof(struct SM64MarioState));
         increment_interpolation_frame();
         gAreaUpdateCounter = get_interpolation_area_update_counter();
     }

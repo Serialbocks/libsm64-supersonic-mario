@@ -1838,9 +1838,12 @@ int init_mario(void) {
     gMarioState->marioObj->header.gfx.animInfo.animID = -1;
 
     vec3s_copy(gMarioState->faceAngle, gMarioSpawnInfo->startAngle);
+    vec3s_copy(gMarioState->prevFaceAngle, gMarioSpawnInfo->startAngle);
     vec3s_set(gMarioState->angleVel, 0, 0, 0);
     vec3s_to_vec3f(gMarioState->pos, gMarioSpawnInfo->startPos);
+    vec3s_to_vec3f(gMarioState->prevPos, gMarioSpawnInfo->startPos);
     vec3f_set(gMarioState->vel, 0, 0, 0);
+    vec3f_set(gMarioState->prevVel, 0, 0, 0);
 
     gMarioState->floorHeight =
         find_floor(gMarioState->pos[0], gMarioState->pos[1], gMarioState->pos[2], &gMarioState->floor);
@@ -1871,7 +1874,13 @@ int init_mario(void) {
     gMarioState->marioObj->oMoveAngleRoll = gMarioState->faceAngle[2];
 
     vec3f_copy(gMarioState->marioObj->header.gfx.pos, gMarioState->pos);
+    vec3f_copy(gMarioState->prevPos, gMarioState->pos);
+    vec3f_copy(gMarioState->marioObj->header.gfx.prevPos, gMarioState->pos);
     vec3s_set(gMarioState->marioObj->header.gfx.angle, 0, gMarioState->faceAngle[1], 0);
+    vec3s_copy(gMarioState->marioObj->header.gfx.prevAngle, gMarioState->marioObj->header.gfx.angle);
+    vec3s_copy(gMarioState->prevFaceAngle, gMarioState->faceAngle);
+
+    gMarioState->hasTicked = false;
 
 #ifdef TODO_LATER
     if (save_file_get_cap_pos(capPos)) {
