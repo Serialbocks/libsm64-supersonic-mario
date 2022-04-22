@@ -379,6 +379,7 @@ static void geo_process_translation_rotation(struct GraphNodeTranslationRotation
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
 
     vec3s_to_vec3f(translation, node->translation);
+    vec3s_copy(rotation, node->rotation);
     if(gMarioState->isInput)
     {
         vec3f_interpolate(translation, node->prevTranslation, translation);
