@@ -24,6 +24,10 @@ void set_interpolation_interval(u32 interval) {
     }
 }
 
+void reset_interpolation(void) {
+    set_interpolation_interval(interpolationInterval);
+}
+
 f32 get_interpolation_delta_time(void) {
     return 1.0f / (30.0f * (f32) interpolationInterval);
 }
