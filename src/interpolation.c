@@ -1,5 +1,8 @@
 #include "interpolation.h"
 #include "decomp/engine/math_util.h"
+#include <stdlib.h>
+
+#define ANGLE_90_DEGREES 16384
 
 u32 interpolationInterval;
 u32 interpolationFrame;
@@ -61,6 +64,9 @@ void vec3f_interpolate(Vec3f dest, Vec3f a, Vec3f b) {
 }
 
 s16 s16_angle_interpolate(s16 a, s16 b) {
+    u32 diff = abs(b - a);
+    if(diff >= ANGLE_90_DEGREES)
+        return b;
     return atan2s(coss(a) * interpolationFactorA + coss(b) * interpolationFactorB,
                   sins(a) * interpolationFactorA + sins(b) * interpolationFactorB);
 }
